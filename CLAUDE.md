@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 16 application using the App Router with TypeScript, React 19, and Tailwind CSS v4. The project follows **DDD (Domain-Driven Design)** and **Hexagonal Architecture** principles with clean separation of concerns.
+This is a Next.js 16 application using the App Router with TypeScript, React 19, and Tailwind CSS v4. The project follows **Clean Architecture** principles with clear separation of concerns.
 
 ## Development Commands
 
@@ -17,9 +17,13 @@ This project uses **pnpm** as the package manager.
 
 ## Architecture
 
-### DDD/Hexagonal Architecture Structure
+### Clean Architecture Structure
 
-The codebase is organized into four main layers inside `src/`:
+The codebase separates the Next.js framework layer from business logic:
+- **`app/`** - Next.js App Router (framework layer, at project root)
+- **`src/`** - Business logic layers (portable, framework-independent)
+
+Business logic is organized into three main layers inside `src/`:
 
 #### 1. Domain Layer (`src/domain/`)
 The core business logic, completely independent of frameworks and external concerns.
@@ -37,41 +41,51 @@ The core business logic, completely independent of frameworks and external conce
 Orchestrates the flow of data and implements use cases.
 - **use-cases/** - Application use cases/interactors
 - **dtos/** - Data Transfer Objects for input/output
-- **ports/** - Interfaces for external services
 
 **Rules:**
 - Depends only on domain layer
 - No UI or database implementation details
-- Defines interfaces (ports) for external dependencies
+- Defines interfaces for external services when needed
 
 #### 3. Infrastructure Layer (`src/infrastructure/`)
 Implements interfaces defined in domain and application layers.
 - **persistence/** - Database implementations, repository implementations
 - **external-services/** - Third-party API clients, integrations
-- **adapters/** - Converters between domain and external formats
+- **di/** - Dependency Injection container configuration (TSyringe)
+- **auth/** - Authentication configuration (NextAuth.js)
 
 **Rules:**
-- Implements repository and port interfaces
-- Contains framework-specific code
+- Implements repository interfaces from domain layer
+- Contains framework-specific and third-party integrations
 - Depends on domain and application layers
+- Configures dependency injection and authentication
 
-#### 4. Presentation Layer (`src/presentation/` and `src/app/`)
-UI components and Next.js routing.
-- **src/app/** - Next.js App Router pages and layouts
+#### 4. Presentation Layer (`src/presentation/`)
+Reusable UI components (framework-independent).
 - **src/presentation/components/ui/** - shadcn/ui components
 - **src/presentation/components/features/** - Feature-specific components
 - **src/presentation/hooks/** - Custom React hooks
 
 **Rules:**
-- Calls application layer use cases
-- No direct access to infrastructure or domain layers
-- Contains React components and Next.js pages
+- Framework-agnostic React components
+- Can use application layer use cases
+- No Next.js-specific code (that goes in `app/`)
+
+### Next.js App Router Layer (`app/`)
+The framework routing layer sits outside `src/` for clear separation:
+- **app/** - Next.js pages, layouts, and route handlers
+- **app/actions/** - Server Actions (wire up use cases here)
+
+This separation means:
+- `src/` contains portable business logic that could work with any framework
+- `app/` is the Next.js-specific entry point that uses the business logic
+- You can move/reuse `src/` in other projects (Remix, Astro, etc.)
 
 ### Dependency Flow
 ```
-Presentation → Application → Domain
-                     ↑
-Infrastructure ------┘
+app/ (Next.js) → src/presentation/ → src/application/ → src/domain/
+                                              ↑
+                       src/infrastructure/ ---┘
 ```
 
 ### TypeScript Path Aliases
@@ -92,13 +106,13 @@ import { cn } from '@/lib/utils'
 
 ### Next.js App Router
 - Uses Next.js 16 with App Router (not Pages Router)
-- Entry point: [src/app/page.tsx](src/app/page.tsx)
-- Root layout: [src/app/layout.tsx](src/app/layout.tsx)
-- All routes in `src/app/` directory
+- Entry point: [app/page.tsx](app/page.tsx)
+- Root layout: [app/layout.tsx](app/layout.tsx)
+- All routes in `app/` directory (at project root)
 
 ### Styling
 - Tailwind CSS v4 with PostCSS plugin (`@tailwindcss/postcss`)
-- Global styles: [src/app/globals.css](src/app/globals.css)
+- Global styles: [app/globals.css](app/globals.css)
 - Uses CSS variables for theming
 - Dark mode supported via class-based strategy
 
@@ -113,12 +127,61 @@ import { cn } from '@/lib/utils'
 - `cn()` function in [src/lib/utils.ts](src/lib/utils.ts) - Merges Tailwind classes using clsx and tailwind-merge
 - Always use `cn()` for conditional className logic
 
+## Dependency Injection
+
+This project uses **TSyringe** for dependency injection to maintain loose coupling and testability.
+
+### Usage
+
+```typescript
+import { getContainer, DI_TOKENS } from '@/infrastructure/di'
+
+// Resolve a use case
+const container = getContainer()
+const loginUseCase = container.resolve<LoginUseCase>(DI_TOKENS.LoginUseCase)
+```
+
+### Key Points
+
+- All dependencies are registered in `src/infrastructure/di/container.ts`
+- Use `DI_TOKENS` for type-safe dependency resolution
+- Domain and application layers remain unaware of DI (no decorators needed)
+- Infrastructure layer configures the container
+- Presentation layer (app/) resolves dependencies
+
+See [src/infrastructure/di/README.md](src/infrastructure/di/README.md) for detailed documentation.
+
 ## Key Dependencies
 
 - Next.js 16.0.6 with React 19.2.0
 - Tailwind CSS v4 with `@tailwindcss/postcss`
 - shadcn/ui utilities: `class-variance-authority`, `clsx`, `tailwind-merge`
 - Icons: `lucide-react`
+- Dependency Injection: `tsyringe`, `reflect-metadata`
+- Authentication: `next-auth@beta` (v5)
+
+## File Organization
+
+### Authentication
+- **`src/infrastructure/auth/`** - NextAuth.js configuration
+  - `config.ts` - Auth configuration (routes, callbacks)
+  - `index.ts` - Main auth setup with providers
+  - Import from: `@/infrastructure/auth`
+
+### Documentation
+- **`docs/`** - All project documentation
+  - `ARCHITECTURE.md` - Clean architecture guide
+  - `NESTJS_INTEGRATION.md` - Backend integration guide
+  - `SETUP_COMPLETE.md` - Setup checklist
+- **`CLAUDE.md`** (root) - Quick reference for development
+- **`README.md`** (root) - Project overview
+
+### Route Groups
+- **`app/(authenticated)/`** - Protected routes requiring login
+  - `dashboard/` - Dashboard page
+  - `diagnosis/` - Fish diagnosis feature
+  - `layout.tsx` - Shared layout with sidebar
+- **`app/login/`** - Public login page (no sidebar)
 
 ## ESLint Configuration
 

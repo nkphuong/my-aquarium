@@ -1,6 +1,6 @@
 # Feature Implementation Template
 
-Use this checklist when implementing a new feature following DDD/Hexagonal Architecture.
+Use this checklist when implementing a new feature following Clean Architecture.
 
 ## Feature: [Feature Name]
 
@@ -35,7 +35,7 @@ Use this checklist when implementing a new feature following DDD/Hexagonal Archi
   - Input/output data structures
   - Simple, serializable objects
 
-- [ ] **Ports** (if needed) - `src/application/ports/[name].port.ts`
+- [ ] **Service Interfaces** (if needed) - `src/application/` or `src/domain/`
   - Interfaces for external services
   - Email, payment, notifications, etc.
 
@@ -47,21 +47,18 @@ Use this checklist when implementing a new feature following DDD/Hexagonal Archi
   - Use ORM/database client
 
 - [ ] **External Service Client** (if needed) - `src/infrastructure/external-services/[name].client.ts`
-  - Implement application ports
+  - Implement service interfaces
   - Third-party API integration
-
-- [ ] **Adapters** (if needed) - `src/infrastructure/adapters/[name].adapter.ts`
-  - Convert between formats
   - Map external data to domain objects
 
 ### 4. Presentation Layer
 
-- [ ] **Server Actions** - `src/app/actions/[entity]-actions.ts`
+- [ ] **Server Actions** - `app/actions/[entity]-actions.ts`
   - Wire up use cases
   - Handle dependency injection
   - Error handling and formatting
 
-- [ ] **Page Components** - `src/app/[route]/page.tsx`
+- [ ] **Page Components** - `app/[route]/page.tsx`
   - Next.js route pages
   - Server components by default
 
@@ -129,7 +126,7 @@ src/presentation/
 └── hooks/
     └── use-user.ts
 
-src/app/
+app/
 ├── users/
 │   ├── page.tsx
 │   └── new/

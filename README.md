@@ -1,6 +1,6 @@
 # My Aquarium
 
-A Next.js 16 application built with **DDD (Domain-Driven Design)** and **Hexagonal Architecture** principles.
+A Next.js 16 application built with **Clean Architecture** principles.
 
 ## Tech Stack
 
@@ -35,17 +35,18 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 
 ## Architecture
 
-This project follows **Clean Architecture** principles using DDD and Hexagonal Architecture patterns.
+This project follows **Clean Architecture** principles with clear separation between business logic and framework concerns.
 
 ### Project Structure
 
 ```
+app/                       # Next.js App Router (Framework Layer)
+├── page.tsx              # Home page
+├── layout.tsx            # Root layout
+└── actions/              # Server Actions (wire up use cases)
+
 src/
-├── app/                    # Next.js App Router (Presentation)
-│   ├── page.tsx           # Home page
-│   └── layout.tsx         # Root layout
-│
-├── domain/                # Domain Layer (Core Business Logic)
+├── domain/               # Domain Layer (Core Business Logic)
 │   ├── entities/         # Business entities with identity
 │   ├── value-objects/    # Immutable value objects
 │   ├── repositories/     # Repository interfaces
@@ -53,13 +54,11 @@ src/
 │
 ├── application/          # Application Layer (Use Cases)
 │   ├── use-cases/       # Business use cases
-│   ├── dtos/            # Data Transfer Objects
-│   └── ports/           # Interfaces for external services
+│   └── dtos/            # Data Transfer Objects
 │
 ├── infrastructure/       # Infrastructure Layer (External Concerns)
 │   ├── persistence/     # Database implementations
-│   ├── external-services/ # Third-party API clients
-│   └── adapters/        # Data converters
+│   └── external-services/ # Third-party API clients
 │
 ├── presentation/        # Presentation Layer (UI)
 │   ├── components/
@@ -74,23 +73,30 @@ src/
 ### Dependency Flow
 
 ```
-Presentation → Application → Domain
-                     ↑
-Infrastructure ------┘
+app/ (Next.js) → src/presentation/ → src/application/ → src/domain/
+                                              ↑
+                       src/infrastructure/ ---┘
 ```
 
-- **Domain Layer**: Pure business logic, no dependencies
-- **Application Layer**: Orchestrates use cases, depends on Domain
-- **Infrastructure Layer**: Implements interfaces from Domain/Application
-- **Presentation Layer**: UI components, depends on Application
+**Key Insight**: The `app/` folder (Next.js framework code) is separate from `src/` (portable business logic). This means:
+- You can move `src/` to another framework (Remix, Astro, etc.) without changes
+- `app/` only handles routing and wires up use cases via Server Actions
+- All business logic lives in `src/`, independent of Next.js
+
+- **Domain Layer** (`src/domain/`): Pure business logic, no dependencies
+- **Application Layer** (`src/application/`): Orchestrates use cases, depends on Domain
+- **Infrastructure Layer** (`src/infrastructure/`): Implements interfaces from Domain/Application
+- **Presentation Layer** (`src/presentation/`): Reusable React components
+- **Next.js Layer** (`app/`): Framework-specific routing and pages
 
 ### Key Principles
 
-1. **Separation of Concerns**: Each layer has a single responsibility
-2. **Dependency Inversion**: Outer layers depend on inner layers
-3. **Framework Independence**: Core business logic is framework-agnostic
-4. **Testability**: Easy to test each layer in isolation
-5. **Flexibility**: Easy to swap implementations (e.g., change database)
+1. **Framework Independence**: Business logic (`src/`) is completely independent of Next.js
+2. **Portability**: `src/` can be moved to any React framework (or even non-React with adapters)
+3. **Separation of Concerns**: Each layer has a single responsibility
+4. **Dependency Inversion**: Outer layers depend on inner layers
+5. **Testability**: Easy to test each layer in isolation
+6. **Flexibility**: Easy to swap implementations (e.g., change database or framework)
 
 ## Path Aliases
 
@@ -150,8 +156,7 @@ Components will be added to `src/presentation/components/ui/`.
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
-- [Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
