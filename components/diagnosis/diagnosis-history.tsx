@@ -1,6 +1,7 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
+import { clsx } from "clsx"
 
 interface SavedDiagnosis {
   id: string
@@ -37,7 +38,10 @@ export function DiagnosisHistory({ diagnoses }: DiagnosisHistoryProps) {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h4 className="font-semibold text-foreground">{diagnosis.disease}</h4>
-                <span className={`text-xs font-semibold px-2 py-1 rounded ${severityBadge[diagnosis.severity]}`}>
+                <span className={clsx(
+                  "text-xs font-semibold px-2 py-1 rounded",
+                  severityBadge[diagnosis.severity]
+                )}>
                   {diagnosis.severity.charAt(0).toUpperCase() + diagnosis.severity.slice(1)}
                 </span>
               </div>

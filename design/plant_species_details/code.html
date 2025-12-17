@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AquaFlora - Plant Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ecda",
+                        "secondary": "#334155",
+                        "background-light": "#f0f9ff",
+                        "background-dark": "#0f172a",
+                        "surface-dark": "#1e293b",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>.hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-primary selection:text-black">
+<header class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-[#1e293b] bg-white/80 dark:bg-[#020617]/80 backdrop-blur-md">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-8 lg:px-40 flex flex-1 justify-center">
+<div class="layout-content-container flex flex-col w-full max-w-[1280px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap px-0 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">AquaFlora</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">My Tanks</a>
+<a class="text-primary text-sm font-medium leading-normal" href="#">Species Catalog</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Care Guides</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Community</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 md:gap-8 items-center">
+<label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full ring-1 ring-slate-200 dark:ring-[#1e293b] focus-within:ring-primary dark:focus-within:ring-primary transition-all">
+<div class="text-slate-400 dark:text-slate-400 flex border-none bg-slate-50 dark:bg-[#1e293b] items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-slate-50 dark:bg-[#1e293b] focus:border-none h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search plants..." value=""/>
+</div>
+</label>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/20" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTx0oBSzM5wJMeG2wVzM-F_cCL3Uk6120zWjuDwOf034lu0rA8Ur_ZSeDGZeWShi0vqBv3ty4s0xWTnTgiTjhY4UCbtIq91vwFMr3kHfVjrHLuY94PvkM14L1hv7AmLzAIih-vFSORTidPdK186t9jMA_wKUyVzsRLzXcnSDSGaMo356kHkE_jL4_lXzjkMVypgsDKjsFSBGTyWOS928LZHCj49Zr-wATaIrNBLcULT7e8bqYF-vU1dsGf0mwZq89TvZ0xPi3j7_A");'></div>
+</div>
+</header>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow px-4 md:px-8 lg:px-40 py-5 flex justify-center w-full">
+<div class="layout-content-container flex flex-col w-full max-w-[1280px]">
+<div class="flex flex-wrap gap-2 py-4 text-sm">
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-slate-400 dark:text-slate-600">/</span>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Plant Database</a>
+<span class="text-slate-400 dark:text-slate-600">/</span>
+<span class="text-slate-900 dark:text-white font-medium">Rotala Rotundifolia</span>
+</div>
+<div class="flex flex-col md:flex-row justify-between gap-4 py-4 items-start md:items-center">
+<div class="flex flex-col gap-1">
+<h1 class="text-3xl md:text-5xl font-black leading-tight tracking-[-0.033em] text-slate-900 dark:text-white">Rotala Rotundifolia</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg font-normal">Lythraceae • Southeast Asia</p>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none h-11 px-6 rounded-lg border border-slate-200 dark:border-[#1e293b] text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-[#1e293b] font-bold text-sm transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+                    Save
+                </button>
+<button class="flex-1 md:flex-none h-11 px-6 rounded-lg bg-primary hover:bg-primary/90 text-black font-bold text-sm transition-colors shadow-[0_0_15px_rgba(19,236,218,0.3)] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">water_drop</span>
+                    Add to Tank
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+<div class="lg:col-span-7 flex flex-col gap-8">
+<div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl group">
+<div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10"></div>
+<div class="w-full h-full bg-center bg-cover transform group-hover:scale-105 transition-transform duration-700" data-alt="Close up of vibrant red and green Rotala Rotundifolia underwater" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuABP0TlLwvQBcRhG-t14kboAqbyUg9cNJmV_bFwyTFMD6Ij0TRx6bxBNkFNfmr1jIwzCm-ErH4F8ndnX_fIkeZV24NFykG_bbvcIEAJNQpI499BLgLbWwOleex8MTFyJmJDqrYtTHmB87Vgm4BdFX3J9IX3TWqbfMU_Ny8MWTDo1SFfa7DlKhAT7ma3UBzQk0RyAbM6GcqJCTxHIJEOAIm8TRTPI8e1-ZDLqhMmq8dGaf20Zu5VBr-LH_QD7xi-0ACkbHHvrsQOv3E");'>
+</div>
+<div class="absolute bottom-4 left-4 z-20 flex gap-2">
+<span class="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-primary text-xs font-bold border border-primary/20">
+                            Stem Plant
+                        </span>
+</div>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar gap-4 pb-2 snap-x">
+<div class="snap-start shrink-0 w-32 md:w-40 aspect-video rounded-lg overflow-hidden cursor-pointer ring-2 ring-primary ring-offset-2 ring-offset-[#0f172a]">
+<div class="w-full h-full bg-center bg-cover" data-alt="Rotala Rotundifolia in a dutch style aquascape" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHF5l4fj2g7usBg5AUk9_i8vwY_1oVE01xyBdZYeGzG1Dgc4etbV2fQI1oA17u9eGEbY783bBjl2EorJonYHdfZWSIkXLeZob9nburaZyMZK6Z2uOIUnL8cKx6IYsBTEA47vliSwIJQ6PPqyo8jz58DfAit5HVeZJ8nO-QkVfEmsNC4aM65c2mtpk4XUAICroS5ZDFUf0dXd-vpeXa3l3kN2wP_AbNTZ8dvBmtfC0yLo6-g2rmtNuVKuziH_fnKAusVOBNnRcs2fE");'></div>
+</div>
+<div class="snap-start shrink-0 w-32 md:w-40 aspect-video rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+<div class="w-full h-full bg-center bg-cover" data-alt="Macro shot of Rotala leaves showing pearling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuABAIgmLLazk_at8KO1Q0RI2sAy-sECnlxe6RBGUUCkqaIHPqmNYNR9Jh3JoOeoYiHlploGy6ytzEScyGc3REswG_uqKG40gk3-6Tghw-1i8wZjarihTVXn1Z0u_EB8I1zxqyEcohrk6f62oFyhq7sRV7XWFQc_ZZdmnhFW6ELcOz0z9leybTVkhlU2vpA_MsrXx7fITjVb5wy56agCVlz78aUImtpaIdfdlGBg8yoUeFAg_B5zqScNCcfwf5rsf8yIf3-boKIJI48");'></div>
+</div>
+<div class="snap-start shrink-0 w-32 md:w-40 aspect-video rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+<div class="w-full h-full bg-center bg-cover" data-alt="Rotala Rotundifolia background placement example" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCOnNjtZkamaCOQQYc2vSHr0j7qATnCXBgtr20OKlF4lsPd4AnCdv9RubuGsOo9TedkVttC0xK1WjFTS0lRl3Y2WTpzHSZL89UVAT9VfFmM07Ser91XQz6DOiiPdTNMB1ddn9PWu9dW5bDADhbfMITmwV5nMpiJvyNKU0wlx6Wgk0rm7ni7JftG7zl32ZTXLiPyo6xarHUnWYo0pATaOEWlNjHctkaWK0otXqUsk5C-hWNeQJwZrPs1eV-gEElvDlJbmu-9LBA2Yg8");'></div>
+</div>
+<div class="snap-start shrink-0 w-32 md:w-40 aspect-video rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+<div class="w-full h-full bg-center bg-cover" data-alt="Top down view of red aquarium plants" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_tyaZi_1MHckTzesBxxTbvhRjIi0dCNUpIzr_VF6Zp2TvLqCjQ7-Drl2tuOGZHwGErUQdMviypHqEsxs9oEOQCXYObTCEXjIqOGvtcpowHgIa2REucZASEcECo1eAb3H6_fVU4yuDdyQmC_vsdUlaSfksaVrx-awQyYntFhPyyrkiUqszAeZoYRWvHzXAzYUr5NEfEvGCIuKan-5WlbJnNRtkhs_O9YCvq0jztcfZbOzj12dIZsx2ijitaSQimwFSZ33CKoczsRc");'></div>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-xl p-6 md:p-8 border border-slate-100 dark:border-[#1e293b]">
+<h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">description</span>
+                        Description
+                    </h3>
+<div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed">
+<p class="mb-4">
+<strong>Rotala Rotundifolia</strong>, often simply called "Rotala", is a classic aquarium stem plant that has been a staple in the hobby for decades. Originally from Southeast Asia, its Latin name "Rotundifolia" means "round-leaved", referring to its emersed growth form where the leaves are circular. However, once submerged, the leaves transform into long, narrow, and lanceolate shapes that flow beautifully in the current.
+                        </p>
+<p class="mb-4">
+                            This plant is exceptionally versatile and relatively forgiving, making it an excellent choice for beginners looking to experiment with red plants. Under intense lighting and with sufficient iron supplementation, the tips of the stems will turn a vibrant pink to deep red. In lower light conditions, the plant remains a fresh lime green.
+                        </p>
+<p>
+                            It is a fast grower and requires regular pruning to maintain a bushy appearance. Trimmings can be easily replanted to propagate the species, quickly filling out the background of your aquascape.
+                        </p>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-[#1e293b] flex flex-col items-center justify-center gap-2 text-center">
+<div class="p-2 rounded-full bg-orange-100 dark:bg-orange-500/20 text-orange-500 dark:text-orange-400">
+<span class="material-symbols-outlined text-[24px]">wb_sunny</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Light</p>
+<p class="font-bold text-slate-900 dark:text-white">Med - High</p>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-[#1e293b] flex flex-col items-center justify-center gap-2 text-center">
+<div class="p-2 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-500 dark:text-blue-400">
+<span class="material-symbols-outlined text-[24px]">air</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">CO2</p>
+<p class="font-bold text-slate-900 dark:text-white">Recommended</p>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-[#1e293b] flex flex-col items-center justify-center gap-2 text-center">
+<div class="p-2 rounded-full bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined text-[24px]">speed</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Growth</p>
+<p class="font-bold text-slate-900 dark:text-white">Fast</p>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-[#1e293b] flex flex-col items-center justify-center gap-2 text-center">
+<div class="p-2 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-500 dark:text-purple-400">
+<span class="material-symbols-outlined text-[24px]">psychology</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Difficulty</p>
+<p class="font-bold text-slate-900 dark:text-white">Medium</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-xl p-6 border border-slate-100 dark:border-[#1e293b]">
+<h3 class="text-lg font-bold mb-6 text-slate-900 dark:text-white flex items-center justify-between">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-primary">thermostat</span> Water Parameters</span>
+<span class="text-xs font-normal text-slate-400 dark:text-slate-500 px-2 py-1 bg-slate-100 dark:bg-[#020617] rounded">Optimal Ranges</span>
+</h3>
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">pH Level</span>
+<span class="font-bold text-slate-900 dark:text-white">5.5 - 7.5</span>
+</div>
+<div class="relative h-2 bg-slate-100 dark:bg-[#020617] rounded-full overflow-hidden">
+<div class="absolute top-0 bottom-0 left-[20%] right-[30%] bg-gradient-to-r from-primary/40 to-primary rounded-full"></div>
+</div>
+<div class="flex justify-between text-xs text-slate-400 dark:text-slate-600 font-mono">
+<span>4.0</span>
+<span>6.0</span>
+<span>8.0</span>
+<span>9.0</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">Temperature</span>
+<span class="font-bold text-slate-900 dark:text-white">22°C - 28°C</span>
+</div>
+<div class="relative h-2 bg-slate-100 dark:bg-[#020617] rounded-full overflow-hidden">
+<div class="absolute top-0 bottom-0 left-[40%] right-[20%] bg-gradient-to-r from-blue-400 to-orange-400 rounded-full opacity-80"></div>
+</div>
+<div class="flex justify-between text-xs text-slate-400 dark:text-slate-600 font-mono">
+<span>10°C</span>
+<span>20°C</span>
+<span>30°C</span>
+<span>40°C</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2">
+<div class="bg-slate-50 dark:bg-[#020617] p-3 rounded-lg text-center">
+<span class="block text-xs text-slate-400 dark:text-slate-500 mb-1">Carbonate Hardness</span>
+<span class="block text-lg font-bold text-slate-800 dark:text-slate-200">0 - 8 dKH</span>
+</div>
+<div class="bg-slate-50 dark:bg-[#020617] p-3 rounded-lg text-center">
+<span class="block text-xs text-slate-400 dark:text-slate-500 mb-1">General Hardness</span>
+<span class="block text-lg font-bold text-slate-800 dark:text-slate-200">4 - 12 dGH</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-xl p-6 border border-slate-100 dark:border-[#1e293b]">
+<h3 class="text-lg font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">eco</span>
+                        Nutrient Requirements
+                    </h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-10 text-sm font-bold text-slate-500 dark:text-slate-400">NO3</div>
+<div class="flex-1 h-3 bg-slate-100 dark:bg-[#020617] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-[70%] rounded-full"></div>
+</div>
+<div class="w-12 text-xs text-right text-slate-400 dark:text-slate-600">High</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 text-sm font-bold text-slate-500 dark:text-slate-400">PO4</div>
+<div class="flex-1 h-3 bg-slate-100 dark:bg-[#020617] rounded-full overflow-hidden">
+<div class="h-full bg-teal-500 w-[50%] rounded-full"></div>
+</div>
+<div class="w-12 text-xs text-right text-slate-400 dark:text-slate-600">Med</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 text-sm font-bold text-slate-500 dark:text-slate-400">Fe</div>
+<div class="flex-1 h-3 bg-slate-100 dark:bg-[#020617] rounded-full overflow-hidden">
+<div class="h-full bg-red-500 w-[90%] rounded-full shadow-[0_0_10px_rgba(239,68,68,0.4)]"></div>
+</div>
+<div class="w-12 text-xs text-right text-slate-400 dark:text-slate-600">V. High</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 text-sm font-bold text-slate-500 dark:text-slate-400">K</div>
+<div class="flex-1 h-3 bg-slate-100 dark:bg-[#020617] rounded-full overflow-hidden">
+<div class="h-full bg-yellow-500 w-[60%] rounded-full"></div>
+</div>
+<div class="w-12 text-xs text-right text-slate-400 dark:text-slate-600">Med</div>
+</div>
+</div>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-4 italic">
+                        * Iron (Fe) is critical for red coloration. Nitrate limitation can also induce redder hues.
+                    </p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-slate-200 dark:bg-[#1e293b] text-slate-700 dark:text-white rounded-lg text-xs font-medium border border-transparent hover:border-primary transition-colors cursor-default">Background</span>
+<span class="px-3 py-1 bg-slate-200 dark:bg-[#1e293b] text-slate-700 dark:text-white rounded-lg text-xs font-medium border border-transparent hover:border-primary transition-colors cursor-default">Stem Plant</span>
+<span class="px-3 py-1 bg-slate-200 dark:bg-[#1e293b] text-slate-700 dark:text-white rounded-lg text-xs font-medium border border-transparent hover:border-primary transition-colors cursor-default">Red Plant</span>
+<span class="px-3 py-1 bg-slate-200 dark:bg-[#1e293b] text-slate-700 dark:text-white rounded-lg text-xs font-medium border border-transparent hover:border-primary transition-colors cursor-default">Asia</span>
+<span class="px-3 py-1 bg-slate-200 dark:bg-[#1e293b] text-slate-700 dark:text-white rounded-lg text-xs font-medium border border-transparent hover:border-primary transition-colors cursor-default">Aquascaping</span>
+</div>
+</div>
+</div>
+<div class="mt-12 mb-8">
+<h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Similar Species</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="group bg-white dark:bg-surface-dark rounded-xl overflow-hidden border border-slate-100 dark:border-[#1e293b] hover:border-primary/50 transition-all cursor-pointer shadow-sm hover:shadow-lg hover:shadow-primary/10">
+<div class="aspect-[4/3] w-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Rotala H'ra aquatic plant vibrant red" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDd9ROLsMh2lpXmRiDgGDltC1oMxObAxf6kT8batxQwdSyNChCVoEK7FURd_zEdnJTWByreqypycI3alBJMASP7-k6IXXyvvisgb06ANhYUMJFQeP2UPsA01YuEHZj1GmQmeuzM0SnkN1KS0L9qLmgb4Pm8_g4ln5oo0NWgg5VpLwQruMKUaWzH6sI9iQNDceRfoEpmSF2fHrNeU3hTRx8HAs7O9PXFjdwDFJlmXSUvEApiM8cnMufFnnHsVywdHheB59Hp0LaQE1Q");'>
+</div>
+<div class="p-4">
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">Rotala H'ra</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Advanced</span>
+<span class="text-xs px-2 py-0.5 rounded bg-primary/20 text-primary-dark dark:text-primary">Red</span>
+</div>
+</div>
+</div>
+<div class="group bg-white dark:bg-surface-dark rounded-xl overflow-hidden border border-slate-100 dark:border-[#1e293b] hover:border-primary/50 transition-all cursor-pointer shadow-sm hover:shadow-lg hover:shadow-primary/10">
+<div class="aspect-[4/3] w-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Ludwigia Palustris Super Red aquatic plant" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAHpDLjtVTtVS9BLn7DlXhmoEzY9nlvUPzYrqPgkZHqra5YUNNL03SBsJOCyO0TgocpfswtZ7VeN-EG35HQtDXKaaz25xk63JRn4SysezI6zXMyGgv9Pr4JPg5yyFrq9fd2hq7NBfAJ1QVn6Xjv4PnDKDZr_Dar4q-pK_awxkNoIvmbRzFVgLDZeuWnwjF0Q_IBdGX0-ksMOPfRCQpx2i04s2UaaOieBdeFHj-RaBEyuGbUyd6iOJpuzIXqkl8fLlThgb1VmM6qqPk");'>
+</div>
+<div class="p-4">
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">Ludwigia Super Red</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Medium</span>
+<span class="text-xs px-2 py-0.5 rounded bg-primary/20 text-primary-dark dark:text-primary">Deep Red</span>
+</div>
+</div>
+</div>
+<div class="group bg-white dark:bg-surface-dark rounded-xl overflow-hidden border border-slate-100 dark:border-[#1e293b] hover:border-primary/50 transition-all cursor-pointer shadow-sm hover:shadow-lg hover:shadow-primary/10">
+<div class="aspect-[4/3] w-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Rotala Green aquatic plant" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBeGuiAOk4u3JkKYkH0TPQGqWjrWLvax_NuTCUoByISdv45mCpEmidewOmkR2fPv6Zr1mAtdtB54rhlVHGb7Skfd0gHWyAHv_K4wD_oKTM7TTZC3lcvb2wyGNDRAR6G6CDwPr-laV36WPI8nFvQFFVF9iWX3slOf_7X5eqwaFabM0fQ_wKqyYuBJzoBv5gfxI1LCMgU1TWJixkDYLdcKLpflmGF2YTDW_xKXWEsPF7hK5SLGVPjun_D1lrbBM4AFDZeHlVXnp4ArMs");'>
+</div>
+<div class="p-4">
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">Rotala Green</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Easy</span>
+<span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-700 dark:text-green-400">Green</span>
+</div>
+</div>
+</div>
+<div class="group bg-white dark:bg-surface-dark rounded-xl overflow-hidden border border-slate-100 dark:border-[#1e293b] hover:border-primary/50 transition-all cursor-pointer shadow-sm hover:shadow-lg hover:shadow-primary/10">
+<div class="aspect-[4/3] w-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Alternanthera Reineckii Mini aquatic plant" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCHE2dQW3wDGokIbY45W8ZFU64uTzsscDsw4VKNsOKAsRFQ17CRA0_k0wIpQj9aq0S0TncbB7oEg0l_x9_6uzr03VF2syDU5hlSVWyGd86z9IbdEH6IhNFDj1-c_sY3UcZOSJGukrI2VyW10Pu1_fbn0E2WWleabt1C58Xy9xwIn_bdDnbQkdfoA-iAZUM1NLu5HgQQhDYKRQehPoNK5iPQESZ_pA32ZIKgeBJ3cSzOoAAaTu6zL17ch22lAoC5YvBkd1h5rqjGs-4");'>
+</div>
+<div class="p-4">
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">AR 'Mini'</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Medium</span>
+<span class="text-xs px-2 py-0.5 rounded bg-purple-500/20 text-purple-700 dark:text-purple-400">Purple</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

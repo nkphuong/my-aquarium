@@ -19,16 +19,16 @@ This project uses **pnpm** as the package manager.
 
 ### Clean Architecture Structure
 
-The codebase separates the Next.js framework layer from business logic:
-- **`app/`** - Next.js App Router (framework layer, at project root)
-- **`src/`** - Business logic layers (portable, framework-independent)
+The codebase follows **true framework independence**:
+- **`src/`** - Pure TypeScript business logic (portable to ANY framework: React, Vue, Svelte, Angular)
+- **`app/`** - Next.js App Router (React/Next.js specific framework layer)
+- **`components/`** - React components (React-specific, follows shadcn/ui convention)
 
-Business logic is organized into three main layers inside `src/`:
+Business logic is organized into three layers inside `src/` (pure TypeScript only):
 
 #### 1. Domain Layer (`src/domain/`)
 The core business logic, completely independent of frameworks and external concerns.
 - **entities/** - Core business objects with identity
-- **value-objects/** - Immutable objects defined by their attributes
 - **repositories/** - Repository interfaces (not implementations)
 - **services/** - Domain services for business logic that doesn't fit in entities
 
@@ -38,14 +38,36 @@ The core business logic, completely independent of frameworks and external conce
 - Contains only business rules and domain logic
 
 #### 2. Application Layer (`src/application/`)
-Orchestrates the flow of data and implements use cases.
-- **use-cases/** - Application use cases/interactors
-- **dtos/** - Data Transfer Objects for input/output
+Orchestrates the flow of data and implements application services.
+- **services/** - Application services with business logic (one service can handle multiple related operations)
+- **dtos/** - Data Transfer Objects (Laravel-style organization)
+  - **dtos/requests/** - Request DTOs for input (similar to Laravel FormRequests)
+  - **dtos/responses/** - Response DTOs for output (similar to Laravel API Resources)
 
 **Rules:**
 - Depends only on domain layer
 - No UI or database implementation details
 - Defines interfaces for external services when needed
+- Services are classes that can contain multiple related methods
+
+**DTO Organization (Laravel-style):**
+```
+src/application/dtos/
+├── requests/           # Input DTOs
+│   ├── auth/
+│   │   └── login.request.ts
+│   └── index.ts
+├── responses/          # Output DTOs
+│   ├── auth/
+│   │   └── login.response.ts
+│   └── index.ts
+└── index.ts           # Re-exports all DTOs
+```
+
+- **Requests**: Input data structures (like Laravel FormRequests)
+- **Responses**: Output data structures (like Laravel API Resources)
+- **Entities**: Business objects remain in `@/domain/entities/`
+- Import from: `@/application/dtos/requests/...` or `@/application/dtos/responses/...`
 
 #### 3. Infrastructure Layer (`src/infrastructure/`)
 Implements interfaces defined in domain and application layers.
@@ -59,48 +81,191 @@ Implements interfaces defined in domain and application layers.
 - Contains framework-specific and third-party integrations
 - Depends on domain and application layers
 - Configures dependency injection and authentication
+- **Pure TypeScript only** - no React/UI code
 
-#### 4. Presentation Layer (`src/presentation/`)
-Reusable UI components (framework-independent).
-- **src/presentation/components/ui/** - shadcn/ui components
-- **src/presentation/components/features/** - Feature-specific components
-- **src/presentation/hooks/** - Custom React hooks
+### React/Next.js Framework Layer
+
+All React and Next.js specific code lives OUTSIDE of `src/`:
+
+#### Components (`/components/`)
+React components following shadcn/ui convention (at project root).
+- **components/ui/** - shadcn/ui components
+- **components/features/** - Feature-specific components
 
 **Rules:**
-- Framework-agnostic React components
-- Can use application layer use cases
-- No Next.js-specific code (that goes in `app/`)
+- React-specific code
+- Can use services from `src/application/`
+- Follows shadcn/ui convention (components at root)
 
-### Next.js App Router Layer (`app/`)
-The framework routing layer sits outside `src/` for clear separation:
-- **app/** - Next.js pages, layouts, and route handlers
-- **app/actions/** - Server Actions (wire up use cases here)
+#### Next.js App Router (`/app/`)
+Next.js pages, layouts, and framework-specific code.
+- **app/(routes)/** - Pages and layouts (Next.js App Router)
+- **app/actions/** - Server Actions
+- **app/stores/** - Zustand stores for state management
+  - **stores/app/** - Application state (auth, user session)
+  - **stores/ui/** - UI state (modals, theme, loading)
 
-This separation means:
-- `src/` contains portable business logic that could work with any framework
-- `app/` is the Next.js-specific entry point that uses the business logic
-- You can move/reuse `src/` in other projects (Remix, Astro, etc.)
+**Rules:**
+- Next.js and React specific
+- Can use services from `src/application/`
+- All React state management (Zustand) lives here
+
+### State Management with Zustand
+
+**Where**: `app/stores/` (Next.js/React framework layer)
+
+Zustand stores are React hooks, so they live in the `app/` layer (NOT in `src/`).
+
+**Organization:**
+```
+app/
+├── types/             # Client-side type definitions (plain objects)
+│   ├── auth.types.ts  # Auth DTOs for client
+│   └── tank.types.ts  # Tank DTOs for client
+│
+├── actions/           # Server Actions (serialization boundary)
+│   ├── auth.actions.ts # Calls services, serializes responses
+│   └── tank.actions.ts # Calls services, serializes responses
+│
+└── stores/            # Zustand stores
+    ├── app/           # Application state
+    │   ├── auth.store.ts  # Uses actions & types
+    │   └── tank.store.ts  # Uses actions & types
+    └── ui/            # Pure UI state
+        └── modal.store.ts
+```
+
+**Key Pattern - Server Actions as Serialization Bridge:**
+```typescript
+// ✅ CORRECT: Store → Server Action → Service
+// app/stores/app/auth.store.ts
+import { create } from 'zustand'
+import { loginAction } from '@/app/actions'  // ✅ Call action, not service!
+import type { ClientUser, LoginRequestDTO } from '@/app/types'
+
+interface AuthStoreState {
+  data: { user: ClientUser | null }  // Separate data from UI
+  ui: { isLoading: boolean; error: string | null }
+  login: (request: LoginRequestDTO) => Promise<void>
+}
+
+export const useAuthStore = create<AuthStoreState>((set) => ({
+  data: { user: null },
+  ui: { isLoading: false, error: null },
+
+  login: async (request) => {
+    set({ ui: { isLoading: true, error: null } })
+    const result = await loginAction(request)  // ✅ Server Action handles serialization
+    if (result.success) {
+      set({ data: { user: result.user }, ui: { isLoading: false, error: null } })
+    }
+  }
+}))
+```
+
+```typescript
+// ❌ WRONG: Importing from src/ or calling services directly
+import { getService } from '@/infrastructure/di'  // ❌ Don't import from src/!
+import type { LoginRequest } from '@/application/dtos'  // ❌ Don't use server DTOs!
+
+export const useAuthStore = create((set) => ({
+  login: async (request) => {
+    const authService = getService('AuthService')  // ❌ No direct service calls!
+    const result = await authService.login(request)
+  }
+}))
+```
+
+**Benefits:**
+- ✅ Complete separation: `app/` never imports from `src/`
+- ✅ Server Actions handle serialization (classes → plain objects)
+- ✅ Type-safe across client/server boundary
+- ✅ Domain entities can be classes with methods
+
+**Import from:**
+```typescript
+import { useAuthStore } from '@/stores/app/auth.store'
+import { loginAction } from '@/app/actions'
+import type { ClientUser } from '@/app/types'
+```
+
+### Why This Architecture?
+
+**True Framework Independence:**
+- `src/` contains ONLY pure TypeScript (NO React, NO Next.js, NO frameworks)
+- You can port `src/` to ANY framework: Vue, Svelte, Angular, etc.
+- React/Next.js code lives in `app/` and `components/`
+- Business logic is 100% portable and reusable
 
 ### Dependency Flow
+
 ```
-app/ (Next.js) → src/presentation/ → src/application/ → src/domain/
-                                              ↑
-                       src/infrastructure/ ---┘
+┌──────────────────────────────────────────────────────────┐
+│ Client Layer (app/)                                       │
+│                                                           │
+│  Components → Stores → Server Actions (Serialization)    │
+│                              ↓                            │
+└──────────────────────────────┼────────────────────────────┘
+                               │
+┌──────────────────────────────▼────────────────────────────┐
+│ Server Layer (src/)                                       │
+│                                                           │
+│  Services → Repositories → Domain Entities                │
+│                                                           │
+└───────────────────────────────────────────────────────────┘
 ```
+
+**Data Flow with Server Actions:**
+```
+1. Component calls store action
+   ↓
+2. Store calls Server Action (app/actions/)
+   ↓
+3. Server Action calls Service (src/application/)
+   ↓
+4. Service calls Repository (src/infrastructure/)
+   ↓
+5. Repository returns Domain Entity
+   ↓
+6. Service processes and returns to Action
+   ↓
+7. Action serializes (class → plain object) and returns DTO
+   ↓
+8. Store updates state with plain object DTO
+   ↓
+9. Component re-renders with new state
+```
+
+**Key Points:**
+- ✅ **Server Actions** are the serialization boundary (classes → plain objects)
+- ✅ `app/` never imports from `src/` (complete separation)
+- ✅ `src/` is pure TypeScript (portable to any framework)
+- ✅ Type-safe across client/server boundary
 
 ### TypeScript Path Aliases
 All imports should use TypeScript path aliases defined in [tsconfig.json](tsconfig.json):
-- `@/*` - Maps to `src/*`
-- `@/domain/*` - Domain layer
-- `@/application/*` - Application layer
-- `@/infrastructure/*` - Infrastructure layer
-- `@/presentation/*` - Presentation layer
+
+**Business Logic Layer (src/):**
+- `@/domain/*` - Domain layer (pure TypeScript)
+- `@/application/*` - Application layer (pure TypeScript)
+- `@/infrastructure/*` - Infrastructure layer (pure TypeScript)
+
+**Framework Layer (app/, components/):**
+- `@/app/*` - Next.js App Router
+- `@/stores/*` - Zustand stores (React state)
+- `@/components/*` - React components (shadcn/ui)
+- `@/lib/*` - Utility functions
 
 Examples:
 ```typescript
+// Business logic (src/)
 import { User } from '@/domain/entities/user'
-import { CreateUserUseCase } from '@/application/use-cases/create-user'
-import { Button } from '@/presentation/components/ui/button'
+import { AuthService } from '@/application/services/auth.service'
+import { LoginRequest } from '@/application/dtos'
+
+// Framework layer (app/, components/)
+import { useAuthStore } from '@/stores'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 ```
 
@@ -127,27 +292,49 @@ import { cn } from '@/lib/utils'
 - `cn()` function in [src/lib/utils.ts](src/lib/utils.ts) - Merges Tailwind classes using clsx and tailwind-merge
 - Always use `cn()` for conditional className logic
 
-## Dependency Injection
+## Dependency Injection (NestJS/Laravel Style!)
 
-This project uses **TSyringe** for dependency injection to maintain loose coupling and testability.
+This project uses **auto-resolving DI** - clean, simple, and type-safe!
 
-### Usage
+### Quick Usage
 
 ```typescript
-import { getContainer, DI_TOKENS } from '@/infrastructure/di'
+import { getService } from '@/infrastructure/di'
 
-// Resolve a use case
-const container = getContainer()
-const loginUseCase = container.resolve<LoginUseCase>(DI_TOKENS.LoginUseCase)
+// ✨ One line - auto-resolves with type safety!
+const authService = getService('AuthService')
+await authService.login({ email, password })
 ```
 
-### Key Points
+### Complete Example
 
-- All dependencies are registered in `src/infrastructure/di/container.ts`
-- Use `DI_TOKENS` for type-safe dependency resolution
-- Domain and application layers remain unaware of DI (no decorators needed)
-- Infrastructure layer configures the container
-- Presentation layer (app/) resolves dependencies
+```typescript
+'use server'
+
+import { getService } from '@/infrastructure/di'
+
+export async function loginUser(formData: FormData) {
+  const authService = getService('AuthService')
+  return await authService.login({
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  })
+}
+```
+
+### Key Benefits
+
+- ✅ **One-line resolution**: `getService('AuthService')`
+- ✅ **Type-safe**: TypeScript autocomplete & error checking
+- ✅ **Auto-resolves dependencies**: No manual wiring needed
+- ✅ **Similar to NestJS/Laravel**: Familiar developer experience
+
+### Adding New Services
+
+1. Create service in `src/application/services/`
+2. Add to `DI_TOKENS` and `ServiceMap` in `container.ts`
+3. Register in `configureDependencies()`
+4. Use with `getService('YourService')`
 
 See [src/infrastructure/di/README.md](src/infrastructure/di/README.md) for detailed documentation.
 

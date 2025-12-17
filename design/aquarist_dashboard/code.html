@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aquarist Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#06b6d4",
+                        "primary-hover": "#0891b2",
+                        "background-light": "#f0f9ff",
+                        "background-dark": "#0f172a",
+                        "surface-dark": "#1e293b",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-gray-100 font-display antialiased overflow-hidden selection:bg-primary selection:text-black">
+<div class="flex h-screen w-full">
+<aside class="hidden lg:flex flex-col w-72 h-full bg-surface-light dark:bg-[#020617] border-r border-gray-200 dark:border-gray-800 shrink-0 z-20 transition-colors duration-300">
+<div class="p-6 flex flex-col h-full justify-between">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-4 px-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg ring-2 ring-primary/20" data-alt="Profile picture of aquarist user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDfRsDbZ0_02gH8UA5IviYbA6hSGYY_imfmBqLZnp9JMO0aQ0RJz1iBk6yYMQruzsZSelwFsC5Qjl7KHh2mIX12LigbjgLD7t9NFU_TYiTBzdOW2GojmEcE41ny0PAbXdGwNJrGS0mpocPRV8jJ6UxZo1aXKjKbe34RXphmAoF50zsNfLqbP1Z-V46iLS6yHQFCAx6vUZDgqC_QgKQ-TwobIxf_YGuwQ9NAAKtoTe0oXiFWKZTw_y_ob51KuemZM5RX9g4zqJ85fdc");'>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight">AquaManager</h1>
+<p class="text-slate-500 dark:text-primary text-sm font-medium">Pro Member</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 rounded-full bg-primary/10 dark:bg-primary text-primary-hover dark:text-black group transition-all duration-200 shadow-sm" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-2xl">water_drop</span>
+<span class="text-sm font-medium">My Tanks</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+<span class="text-sm font-medium">Species Database</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-2xl">history_edu</span>
+<span class="text-sm font-medium">Maintenance Log</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<div class="px-2">
+<button class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-600 dark:text-gray-400 transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="text-sm font-medium">Log Out</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="flex-1 h-full overflow-y-auto bg-background-light dark:bg-background-dark relative">
+<div class="lg:hidden flex items-center justify-between p-4 bg-surface-light dark:bg-surface-dark sticky top-0 z-30 shadow-md">
+<h1 class="text-lg font-bold dark:text-white">AquaManager</h1>
+<button class="p-2 text-slate-600 dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="max-w-[1200px] mx-auto p-4 md:p-8 flex flex-col gap-8 pb-20">
+<header class="@container">
+<div class="relative w-full rounded-2xl overflow-hidden min-h-[240px] shadow-2xl group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Deep blue underwater scene with light rays penetrating the surface" style='background-image: linear-gradient(0deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.3) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCvHQewWYsblazJgXGtVT3-AOLOY3P8PT7Eqz7rFIgqohKqaZ4HBuBeWpA7Ns0ChLhgzCZOSETi7L-k2IUp8b3ybHE1OTwSSM2oAqmJ3l48zOxksz2yHuqMmMKtHov6mmK8tsfmqUU8wrZdkpeynIu2qrhNB4zNsW_mUrsIgKEw0kln-MDKLFy2chc5Y1n06uRyZo4_7cucZQx-4XT6KTGovPsFi4cDYtwSZTlSapkHVnj1oGblucAZR_UNMOhM9pedu8r6bkjEVv0");'>
+</div>
+<div class="relative z-10 flex flex-col justify-end h-full p-6 md:p-10 min-h-[240px]">
+<div class="flex flex-col gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/20 backdrop-blur-md text-primary border border-primary/30 text-xs font-bold uppercase tracking-wider w-fit">Dashboard</span>
+<h2 class="text-white text-3xl md:text-4xl font-bold leading-tight tracking-tight">Good evening, Aquarist</h2>
+<p class="text-gray-300 max-w-lg text-lg">Your ecosystems are thriving. You have 2 maintenance tasks scheduled for tomorrow.</p>
+</div>
+</div>
+<button class="absolute bottom-6 right-6 md:bottom-10 md:right-10 bg-primary hover:bg-primary-hover text-black size-14 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all hover:scale-110 active:scale-95 group/btn" title="Add Log">
+<span class="material-symbols-outlined text-3xl transition-transform group-hover/btn:rotate-90">add</span>
+</button>
+</div>
+</header>
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="flex flex-col gap-1 p-5 rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-2 text-slate-500 dark:text-gray-400 mb-2">
+<span class="material-symbols-outlined text-xl">grid_view</span>
+<span class="text-sm font-medium">Total Tanks</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold dark:text-white">3</span>
+<span class="text-sm font-medium text-emerald-500">+1 new</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 p-5 rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute right-0 top-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-6xl text-red-500">warning</span>
+</div>
+<div class="flex items-center gap-2 text-slate-500 dark:text-gray-400 mb-2">
+<span class="material-symbols-outlined text-xl text-red-400">notifications_active</span>
+<span class="text-sm font-medium">Active Alerts</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold dark:text-white">1</span>
+<span class="text-sm font-medium text-red-400">Needs attention</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 p-5 rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-2 text-slate-500 dark:text-gray-400 mb-2">
+<span class="material-symbols-outlined text-xl">water_full</span>
+<span class="text-sm font-medium">Next Water Change</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold dark:text-white truncate">Tomorrow</span>
+</div>
+<span class="text-xs font-medium text-slate-400 dark:text-gray-500">Reef Tank (20%)</span>
+</div>
+<div class="flex flex-col gap-1 p-5 rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-2 text-slate-500 dark:text-gray-400 mb-2">
+<span class="material-symbols-outlined text-xl">set_meal</span>
+<span class="text-sm font-medium">Total Inhabitants</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold dark:text-white">42</span>
+<span class="text-sm font-medium text-emerald-500">+2 born</span>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold dark:text-white tracking-tight">My Tanks</h2>
+<a class="text-sm font-medium text-primary hover:text-primary-hover flex items-center gap-1" href="#">
+                            View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+<div class="group flex flex-col md:flex-row bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-lg hover:border-primary/30 transition-all">
+<div class="w-full md:w-1/3 min-h-[200px] md:min-h-auto bg-cover bg-center relative" data-alt="Lush green planted aquarium tank" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBMpfliVZBIoPCjxQjGHx1hC5Jesi2QED30cTQwjCdK_BKxQJ4KHHABMB5Po83o06baaaDr61iF1b97SG82U8KGpw__JlUJodNqZVrF-hCSaIJ3hvGP1LQ_yKvDFfwnAn8oegh3yvbdieUMnownRBuwqpk4CiQJqPtnEAexA30g4HUvdZ1Yq9wigortpOadeWX4jPWrtoGMBr-ajObvceVBWAYETo-jSM1pB-cgoK-5w9CazEVejJOrdvgT4ZAyIbfn2yk018Km1l0");'>
+<div class="absolute top-3 left-3 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide shadow-sm">Healthy</div>
+</div>
+<div class="flex-1 p-5 flex flex-col justify-between gap-4">
+<div>
+<h3 class="text-xl font-bold dark:text-white mb-1">55g Planted Community</h3>
+<p class="text-slate-500 dark:text-gray-400 text-sm">Last tested: 2 days ago</p>
+</div>
+<div class="grid grid-cols-3 gap-2 py-2 border-y border-gray-100 dark:border-gray-700/50">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 uppercase font-semibold">Temp</span>
+<span class="text-lg font-bold dark:text-white flex items-center gap-1">
+                                            78° <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+<div class="flex flex-col border-l border-gray-100 dark:border-gray-700/50 pl-4">
+<span class="text-xs text-slate-400 uppercase font-semibold">pH</span>
+<span class="text-lg font-bold dark:text-white flex items-center gap-1">
+                                            6.8 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+<div class="flex flex-col border-l border-gray-100 dark:border-gray-700/50 pl-4">
+<span class="text-xs text-slate-400 uppercase font-semibold">NO3</span>
+<span class="text-lg font-bold dark:text-white flex items-center gap-1">
+                                            10 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Tetra fish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDQloq6cpGaMFnLkfaAkBDBYe_kw5zP-U0kmykg_ySZLBYTQBNUcoaZNGs8672LqfbZ7zEBaMGF96Mj8-0LDQXFHCIx_5yfpInkdyukwwTrX7qOTmldTKt6hRzxCoKbrl9FrlKaNqRiRcdAjofOYcbVGBqho9VHQ2Oi-3Vus5E5YffmRGwhjkgbeXSOrI6_Osm8zOqWqt13xRz7XpnKT1jY9aFMDrzHwYj6Xjq-hlLmKdAOEAjGAFV_I99_WCb4FAwM2C9YgJoMwM");'></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Guppy fish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWZXk8zr1NACuOG7gRGmjAwgQylc3VhO8tISLd8TUAxNSeIiKY3DUqIU483HSnzKOZxhlBk4YjMHfOmwmPxKdSRkkcfBtgkDEla1QMrGAAomXwSENZSftqFRTzbvPla0XCS4Au42JFH5ayAZE1ogXoeZzc3_RKpH-zCR6yj76Xn16X2GBxiHqveL3HtA5bMiGD1UzDvgKrje6SZY4RQcxH22hijmki33CxPlSaWXd9kWEQId8ubzFMINRpeXZaN3iicfOmD9SwUCw");'></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-surface-dark bg-gray-700 flex items-center justify-center text-[10px] text-white font-medium">+12</div>
+</div>
+<button class="px-4 py-2 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-900 dark:text-primary hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black text-sm font-semibold transition-all">
+                                        Details
+                                    </button>
+</div>
+</div>
+</div>
+<div class="group flex flex-col md:flex-row bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-lg hover:border-red-500/30 transition-all">
+<div class="w-full md:w-1/3 min-h-[200px] md:min-h-auto bg-cover bg-center relative" data-alt="Colorful reef aquarium tank with corals" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBri9KANXjAJT4RTRSbPgNRs_K9bu6grnMfb3hGXfPIrwQJDLGkFdJjGVEciqbQkrYdKkdFT7q6rt55YYuWDsTfi5douSzuWHB9mqsLopdgdWwjHoa3js4HmI6tLpmf-BfATj-3GxuhDJOm-I5RT1pcZCwjgmVTBdrxpk7DxVKdzsFiIGnoqeX4emcaIKa3UKq-Yewu-VS1I24IivgC1B0MgAXSVXU-BtB_jVNSAdBcfFtZS2brZs9U-yg4ot113eoU05vEkDbZS_M");'>
+<div class="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide shadow-sm animate-pulse">Check Filter</div>
+</div>
+<div class="flex-1 p-5 flex flex-col justify-between gap-4">
+<div>
+<h3 class="text-xl font-bold dark:text-white mb-1">20g Nano Reef</h3>
+<p class="text-slate-500 dark:text-gray-400 text-sm">Last tested: Yesterday</p>
+</div>
+<div class="grid grid-cols-3 gap-2 py-2 border-y border-gray-100 dark:border-gray-700/50">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 uppercase font-semibold">Temp</span>
+<span class="text-lg font-bold dark:text-white flex items-center gap-1">
+                                            79° <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+<div class="flex flex-col border-l border-gray-100 dark:border-gray-700/50 pl-4">
+<span class="text-xs text-slate-400 uppercase font-semibold">Salinity</span>
+<span class="text-lg font-bold dark:text-white flex items-center gap-1">
+                                            1.026 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+<div class="flex flex-col border-l border-gray-100 dark:border-gray-700/50 pl-4">
+<span class="text-xs text-slate-400 uppercase font-semibold">Alk</span>
+<span class="text-lg font-bold dark:text-white flex items-center gap-1">
+                                            8.5 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Clownfish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC9zp1O_NDNrfGOHhA9-GN7hPuiNHiVs77zhjo_Ri4hIis0K8SubsoeK-z_oIl7NtL_4wyR9Q6yvi8IdJ8Gj57juodoMJ13wtRiDfuz7dAY5e93WGUNx9Aq2idprqSiVdRMcIT8Vu1aDL1q6jtfvtfKVcCWgdXxBcZzyDOGbhZ_VAV1FOoKhZ1iwSccSqEoEnY4gOAwcZyt-joRzPIN3hOifkPe__67T6mi-_8IoAhlphcxPl_s82D4Mjl1cYN5O2Pp7Pyw4tfKy44");'></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-surface-dark bg-gray-700 flex items-center justify-center text-[10px] text-white font-medium">+4</div>
+</div>
+<button class="px-4 py-2 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-900 dark:text-primary hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black text-sm font-semibold transition-all">
+                                        Details
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 flex flex-col gap-4">
+<h2 class="text-xl font-bold dark:text-white">Recent Activity</h2>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-100 dark:border-gray-800 p-4">
+<div class="flex gap-4 p-3 border-b border-gray-100 dark:border-gray-800 items-start">
+<div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600 dark:text-blue-400 mt-1">
+<span class="material-symbols-outlined text-xl">science</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-slate-900 dark:text-gray-200 font-semibold text-sm">Water Parameters Logged</h4>
+<span class="text-xs text-slate-400">2h ago</span>
+</div>
+<p class="text-slate-500 dark:text-gray-400 text-sm">Ammonia: 0, Nitrite: 0, Nitrate: 10ppm for 55g Planted.</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 border-b border-gray-100 dark:border-gray-800 items-start">
+<div class="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-lg text-emerald-600 dark:text-emerald-400 mt-1">
+<span class="material-symbols-outlined text-xl">restaurant</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-slate-900 dark:text-gray-200 font-semibold text-sm">Feeding Time</h4>
+<span class="text-xs text-slate-400">5h ago</span>
+</div>
+<p class="text-slate-500 dark:text-gray-400 text-sm">Fed Frozen Brine Shrimp to Nano Reef inhabitants.</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 items-start">
+<div class="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-lg text-purple-600 dark:text-purple-400 mt-1">
+<span class="material-symbols-outlined text-xl">content_cut</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-slate-900 dark:text-gray-200 font-semibold text-sm">Plant Trimming</h4>
+<span class="text-xs text-slate-400">Yesterday</span>
+</div>
+<p class="text-slate-500 dark:text-gray-400 text-sm">Trimmed Rotala rotundifolia in the background.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h2 class="text-xl font-bold dark:text-white">Care Suggestions</h2>
+<div class="flex flex-col gap-3">
+<div class="bg-gradient-to-br from-[#0c4a6e] to-[#0369a1] dark:from-[#075985] dark:to-[#0c4a6e] p-5 rounded-xl border border-primary/20 relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex items-start gap-3 relative z-10">
+<span class="material-symbols-outlined text-primary text-2xl">lightbulb</span>
+<div>
+<h4 class="text-white font-bold text-sm mb-1">Adjust Lighting</h4>
+<p class="text-gray-300 text-xs leading-relaxed mb-3">
+                                            Algae growth detected in the Reef Tank. Consider reducing photoperiod by 1 hour.
+                                        </p>
+<button class="text-primary hover:text-white text-xs font-bold uppercase tracking-wide flex items-center gap-1 transition-colors">
+                                            Adjust Schedule <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-red-50 dark:bg-red-900/10 p-5 rounded-xl border border-red-200 dark:border-red-900/30">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-2xl">build</span>
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-sm mb-1">Filter Maintenance Due</h4>
+<p class="text-slate-600 dark:text-gray-400 text-xs leading-relaxed mb-3">
+                                            Canister filter cleaning for 55g Community is due in 2 days.
+                                        </p>
+<button class="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                                            Mark Complete
+                                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

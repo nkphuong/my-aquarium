@@ -21,10 +21,19 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
+      "@/app/*": ["./app/*"],
+      "@/actions/*": ["./app/actions/*"],
+      "@/stores/*": ["./app/stores/*"],
+      "@/app/types/*": ["./app/types/*"],
+      "@/src*": ["./src/*"],
+      "@/types": ["./src/types"],
       "@/domain/*": ["./src/domain/*"],
       "@/application/*": ["./src/application/*"],
-      "@/infrastructure/*": ["./src/infrastructure/*"]
+      "@/dtos/*": ["./src/application/dtos/*"],
+      "@/infrastructure/*": ["./src/infrastructure/*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/src-lib/*": ["./src/lib/*"]
     }
   },
   "include": [

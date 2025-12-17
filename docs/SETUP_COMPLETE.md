@@ -15,11 +15,10 @@ src/                      # ✅ Business logic (framework-independent)
 ├── lib/                  # ✅ Utilities
 ├── domain/               # ✅ Core business logic
 │   ├── entities/
-│   ├── value-objects/
 │   ├── repositories/
 │   └── services/
-├── application/          # ✅ Use cases & orchestration
-│   ├── use-cases/
+├── application/          # ✅ Application services & orchestration
+│   ├── services/
 │   └── dtos/
 ├── infrastructure/       # ✅ External implementations
 │   ├── persistence/
@@ -46,9 +45,8 @@ src/                      # ✅ Business logic (framework-independent)
 
 ### 4. Example Code
 - ✅ Example Entity
-- ✅ Example Value Object
 - ✅ Example Repository Interface
-- ✅ Example Use Case
+- ✅ Example Application Service
 - ✅ Example Repository Implementation
 
 ### 5. Build Verification
@@ -94,10 +92,10 @@ Create tests following the structure in ARCHITECTURE.md.
 ```typescript
 // Domain
 import { User } from '@/domain/entities/user'
-import { Email } from '@/domain/value-objects/email'
 
 // Application
-import { CreateUserUseCase } from '@/application/use-cases/create-user'
+import { UserService } from '@/application/services/user.service'
+import { AuthService } from '@/application/services/auth.service'
 
 // Infrastructure
 import { PrismaUserRepository } from '@/infrastructure/persistence/prisma-user.repository'
@@ -120,8 +118,8 @@ pnpm lint     # Run linter
 
 ### Architecture Layers
 1. **app/** - Next.js framework layer (routing, pages)
-2. **src/domain/** - Pure business logic (no dependencies)
-3. **src/application/** - Use cases (depends on Domain)
+2. **src/domain/** - Pure business logic (entities, repository interfaces)
+3. **src/application/** - Application services (depends on Domain)
 4. **src/infrastructure/** - Implementations (depends on Domain/Application)
 5. **src/presentation/** - Reusable UI components (depends on Application)
 
@@ -146,15 +144,15 @@ pnpm lint     # Run linter
 ```
 1. Domain Layer
    └─→ Define User entity (src/domain/entities/user.entity.ts)
-   └─→ Define Email value object (src/domain/value-objects/email.ts)
    └─→ Define UserRepository interface (src/domain/repositories/user.repository.ts)
 
 2. Application Layer
-   └─→ Create use case (src/application/use-cases/create-user.use-case.ts)
-   └─→ Define DTOs (src/application/dtos/user.dto.ts)
+   └─→ Create service (src/application/services/user.service.ts)
+   └─→ Define DTOs if needed (src/application/dtos/user.dto.ts)
 
 3. Infrastructure Layer
    └─→ Implement repository (src/infrastructure/persistence/prisma-user.repository.ts)
+   └─→ Register in DI container (src/infrastructure/di/container.ts)
 
 4. Presentation Layer
    └─→ Create server action (app/actions/user-actions.ts)

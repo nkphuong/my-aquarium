@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fish Species Details - AquaLog</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2590f4",
+                        "primary-dark": "#1a6fc0",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1b2733",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#2a3b4d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101922; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3b4d; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2590f4; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light/95 dark:bg-[#101922]/95 backdrop-blur supports-[backdrop-filter]:bg-background-light/60">
+<div class="flex h-16 items-center px-4 md:px-10 justify-between max-w-[1440px] mx-auto w-full">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-3 text-primary" href="#">
+<span class="material-symbols-outlined text-3xl">water_drop</span>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight">AquaLog</h2>
+</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-white transition-colors" href="#">My Tanks</a>
+<a class="text-sm font-medium text-primary dark:text-white transition-colors" href="#">Species Catalog</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-white transition-colors" href="#">Plant Guide</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-white transition-colors" href="#">Care Tips</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="h-10 w-64 rounded-xl border-none bg-slate-100 dark:bg-[#1e293b] pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary" placeholder="Search fish, plants..." type="text"/>
+</div>
+<button class="h-10 w-10 rounded-full bg-slate-200 dark:bg-[#1e293b] flex items-center justify-center overflow-hidden border border-slate-300 dark:border-slate-700">
+<div class="bg-center bg-no-repeat bg-cover h-full w-full" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwK5tb7jc0QXbr0QAT2YKE2UNG0-tenti6TIDwfHDqrO7UFlkS5wQpxxNbeev3k0BfpMZeAKQ1Z2Gi1v8F1vXd-Bw4zfGwVi0IbFvCe1dx7dM7qBv3A_rIq39EJwrvMj1AC6KM_9z4VWpzu_nIqDwEHbxbDD0LTKYpgSwSoTfDADId289GV3fB07l5yKuWDCUIam2mQEnbNgHdGf0ax5SopLmrCzc1G0vtH53oGPhW6hsRQQAnwy3HGo3kSVSJbABYhbnECyazhJg");'></div>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1280px] mx-auto px-4 py-6 md:px-8 lg:px-12 md:py-10">
+<!-- Hero Section -->
+<div class="flex flex-col gap-6 lg:flex-row mb-10">
+<div class="relative w-full lg:w-3/5 rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 group aspect-video lg:aspect-auto lg:h-[400px]">
+<div class="absolute inset-0 bg-gradient-to-t from-[#101922] via-transparent to-transparent opacity-60 z-10"></div>
+<div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-105 transition-transform duration-700" data-alt="Vibrant red and blue Betta Splendens fish swimming gracefully" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjZuRGfdXpbzM151hiMfhJOsbA__X5Olv0Gu8aZ71QRyvQXEvBXVEPY90ru20sLWTFJQjYuJoF-at7FoSKz3Ag5_xCkHYPvkqY_R8EMP81cqCTFHZdJJ2ZTnsa0yiQGlCZmK1x2I9D23TfvRwOVftim3MtkuXtDQkw-moKI7ggrjD1uKeRDdhB1C8J7vwXB5aQdrBqXAPpR_yFKns7QXkCYoEvY899-bh7olTfBxgGIe-bWKaLhrodw81fMc9t5Kb0oJj3U_jSyoo");'>
+</div>
+<div class="absolute bottom-0 left-0 p-6 z-20 w-full">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-lg">Betta Splendens</h1>
+<p class="text-slate-200 text-lg font-medium italic drop-shadow-md">Siamese Fighting Fish</p>
+</div>
+<div class="hidden sm:block">
+<span class="inline-flex items-center rounded-full bg-green-500/20 px-3 py-1 text-xs font-medium text-green-300 ring-1 ring-inset ring-green-500/30 backdrop-blur-md">
+                                    Freshwater
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col justify-between w-full lg:w-2/5 gap-4">
+<!-- Quick Stats Cards -->
+<div class="grid grid-cols-2 gap-4 h-full">
+<div class="flex flex-col justify-center p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-2 mb-3 text-primary">
+<span class="material-symbols-outlined">speed</span>
+<span class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Difficulty</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">Easy</p>
+<p class="text-xs text-slate-500 mt-1">Great for beginners</p>
+</div>
+<div class="flex flex-col justify-center p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-2 mb-3 text-primary">
+<span class="material-symbols-outlined">straighten</span>
+<span class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Max Size</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">2.5"</p>
+<p class="text-xs text-slate-500 mt-1">Inches (Standard)</p>
+</div>
+<div class="flex flex-col justify-center p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-2 mb-3 text-primary">
+<span class="material-symbols-outlined">water_full</span>
+<span class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Min Tank</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">5 Gal</p>
+<p class="text-xs text-slate-500 mt-1">Larger is better</p>
+</div>
+<div class="flex flex-col justify-center p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-2 mb-3 text-primary">
+<span class="material-symbols-outlined">hourglass_top</span>
+<span class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lifespan</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">3-5 Yrs</p>
+<p class="text-xs text-slate-500 mt-1">With proper care</p>
+</div>
+</div>
+<button class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold text-lg shadow-lg shadow-primary/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_circle</span>
+                        Add to My Tank
+                    </button>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column (Detail Info) -->
+<div class="lg:col-span-2 flex flex-col gap-8">
+<!-- Bio Section -->
+<section class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 md:p-8 border border-border-light dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">description</span>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Description</h2>
+</div>
+<div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed">
+<p class="mb-4">
+                                The Betta Splendens, commonly known as the Siamese Fighting Fish, is one of the most popular freshwater aquarium fish. Native to the Mekong basin of Laos, Cambodia, Vietnam, and Thailand, these fish are renowned for their brilliant colors and flowing fins.
+                            </p>
+<p>
+                                In the wild, Bettas inhabit standing waters of canals, rice paddies, and floodplains. They possess a unique labyrinth organ that allows them to breathe atmospheric air, an adaptation for surviving in oxygen-poor waters. Male Bettas are highly territorial and will flare their gill covers and spread their fins to intimidate rivals. They should never be housed with other male Bettas.
+                            </p>
+</div>
+</section>
+<!-- Water Parameters -->
+<section class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 md:p-8 border border-border-light dark:border-border-dark shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">thermostat</span>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Water Parameters</h2>
+</div>
+<span class="text-xs font-medium px-2 py-1 rounded bg-blue-500/10 text-blue-500 dark:text-blue-400">Tropical</span>
+</div>
+<div class="flex flex-col gap-8">
+<!-- Temp Slider -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Temperature (°F)</label>
+<span class="text-sm font-bold text-primary">75° - 80°</span>
+</div>
+<div class="relative h-4 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+<!-- Safe Zone -->
+<div class="absolute top-0 bottom-0 left-[40%] right-[30%] bg-primary/30 rounded-full border-x-2 border-primary"></div>
+<!-- Indicator Markers -->
+<div class="absolute top-1/2 -translate-y-1/2 left-[40%] w-3 h-3 bg-primary rounded-full shadow border border-white dark:border-slate-900"></div>
+<div class="absolute top-1/2 -translate-y-1/2 right-[30%] w-3 h-3 bg-primary rounded-full shadow border border-white dark:border-slate-900"></div>
+</div>
+<div class="flex justify-between mt-1 text-xs text-slate-400">
+<span>60°</span>
+<span>90°</span>
+</div>
+</div>
+<!-- pH Slider -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">pH Level</label>
+<span class="text-sm font-bold text-primary">6.5 - 7.5</span>
+</div>
+<div class="relative h-4 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+<!-- Safe Zone -->
+<div class="absolute top-0 bottom-0 left-[45%] right-[35%] bg-green-500/30 rounded-full border-x-2 border-green-500"></div>
+</div>
+<div class="flex justify-between mt-1 text-xs text-slate-400">
+<span>5.0</span>
+<span>9.0</span>
+</div>
+</div>
+<!-- Hardness -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Water Hardness (dGH)</label>
+<span class="text-sm font-bold text-primary">5 - 20 dGH</span>
+</div>
+<div class="relative h-4 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+<!-- Safe Zone -->
+<div class="absolute top-0 bottom-0 left-[15%] right-[30%] bg-purple-500/30 rounded-full border-x-2 border-purple-500"></div>
+</div>
+<div class="flex justify-between mt-1 text-xs text-slate-400">
+<span>0 (Soft)</span>
+<span>30 (Hard)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Tank Setup & Mates -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Tank Setup -->
+<section class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 border border-border-light dark:border-border-dark shadow-sm h-full">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">potted_plant</span>
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Tank Requirements</h2>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<div class="mt-0.5 min-w-5">
+<span class="material-symbols-outlined text-green-500 text-[20px]">check_circle</span>
+</div>
+<div>
+<span class="block text-sm font-bold text-slate-900 dark:text-white">Low Flow</span>
+<span class="text-sm text-slate-500">Filters should not create strong currents.</span>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<div class="mt-0.5 min-w-5">
+<span class="material-symbols-outlined text-green-500 text-[20px]">check_circle</span>
+</div>
+<div>
+<span class="block text-sm font-bold text-slate-900 dark:text-white">Planted Tank</span>
+<span class="text-sm text-slate-500">Thrives with live plants and hiding spots.</span>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<div class="mt-0.5 min-w-5">
+<span class="material-symbols-outlined text-green-500 text-[20px]">check_circle</span>
+</div>
+<div>
+<span class="block text-sm font-bold text-slate-900 dark:text-white">Soft Substrate</span>
+<span class="text-sm text-slate-500">Sand or fine gravel prevents fin damage.</span>
+</div>
+</li>
+</ul>
+</section>
+<!-- Compatibility -->
+<section class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 border border-border-light dark:border-border-dark shadow-sm h-full">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">group</span>
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Compatibility</h2>
+</div>
+<div class="mb-4">
+<p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Good Tank Mates</p>
+<div class="flex gap-3">
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border-2 border-transparent group-hover:border-green-500 transition-all" data-alt="Corydoras Catfish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDocMiLZsXeRqvjryoG-0336GXVREdY_n05rMgBXe3we3ernRD9zqy3tw9U26DTAE72yIpxKUB7aMoDWBD29EcNpbbfer4IxtCv8ytBlVIas2rOJxY60mqUa-CzpRx4Sn_4SqxYfVH_yVvwvX8P8l78LpnLdm4-4dH9bsRh49hpJPCbaIux0M_iTvP_A58AmWN1IbxM2ZaTHeDlC-vGdEKjtXtOZmzYtCnbrX3CZtPPV0dcWMgZ9iZzH_0JF4FH9t_hrW5yoi-5WQo");'></div>
+<span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Corys</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border-2 border-transparent group-hover:border-green-500 transition-all" data-alt="Mystery Snail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCXwNmrDJoUC_v4BC9eDTkbKP2lPk3B5rQw2QaDkyR4WYNt-3Z8hWrtJA5kf2Z6ukFZXhvuAmG0EnsaAI7Y-jdPAoCfjfx8k0EWE8Hw59GvLKgRkjrFWN0C2Q-Z40HWAXKABj9l-HXcYF-Es8RBC3nUUxgNig-W2iq5mh339sCbClKugC7M443IUHpFc8PBmBN33Yw14f2DiDIf1B1zgsCSLY59LQ7_kRWXatLuN2LI4eVpaHGROCjgo9xnwVZPEQ_RuZMlIIsb6w4");'></div>
+<span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Snails</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border-2 border-transparent group-hover:border-green-500 transition-all" data-alt="Kuhli Loach" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcLN30H5jCnXsxZlhXFXINa_QYJ7S39R1eDgOrpGGnhfgHitMxLevbbbtPK6EQy0V0WKOT2yTVM-BQb3vU7k-TWlcot1kHKwEU44Au2TsZ1JblZ4Tu3G51jeMXyDGzFFzsmgCSD2YXD2ntnhxIaRMGrv_t9U0ePFlzgpurw4y2A5q-yoPJjonPlmW96Oyvcj03woHK8fhnw7XPyl_TTme9p6Rq-5PD5BxWLKGknQHtvQctLJU_UT44c_zKejvT4Q6o1aXiAOJO8XE");'></div>
+<span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Loaches</span>
+</div>
+</div>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Avoid</p>
+<div class="flex gap-3">
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border-2 border-transparent group-hover:border-red-500 transition-all grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100" data-alt="Another Male Betta Fish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqt2DZ5uIK793CHxyJJweGi2l5Bke3e95D5T8wDKy79H5OfDOq9RJPBbuDXVsFMWZay2_3d5ihuKH4JMO1CHvg1x8gAPjUzUcW2JaRtuREMhXXSAvyAwsPNZG3_OjaZgSFEy8l2zt8V3HSvaLQz13tEMRVvah1NurTBzWwuNvUpm6QArFGN9Xp2_o54u3Y9vq0fU19VL11AJkvC5HdxxNpSBi8L0BecNonP8zGlCK7gCEsDH9vTpexYQalimSTbmsOJ_cNazzuzSQ");'></div>
+<span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Males</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border-2 border-transparent group-hover:border-red-500 transition-all grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100" data-alt="Tiger Barb" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQzmWlIF9EDsmHeKfNUn5x3ijeoY9ARnG8oc84xq7kCQPmv8Sd2JGnVf1KdSzdXsvnbuVYX_m_vIU-6a2Ti2Ooi-aENRj6xCQFj-hSfMlRfITUoH_QrcrNOupAChNIcbBML9YHgO8h-QXxNM4KqqqHc8Xso9jm2BIbY12DbSNpTZPl1mKm3QwAbwrtaBY4T_EYH7LarA3bHFtaYiyWZ7afH5dvB6dPzbBRAj7rOD3l_NVjTjrLuZ5EcHzLzSeXdhS2HrGnpwvmabw");'></div>
+<span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Nippers</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Right Column (Sidebar) -->
+<div class="lg:col-span-1 space-y-6">
+<!-- Identity Card -->
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+<div class="bg-slate-50 dark:bg-[#16202c] px-6 py-4 border-b border-border-light dark:border-border-dark">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Taxonomy &amp; Origin</h3>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-dashed border-slate-200 dark:border-slate-700 pb-3">
+<span class="text-sm text-slate-500">Family</span>
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Osphronemidae</span>
+</div>
+<div class="flex justify-between items-center border-b border-dashed border-slate-200 dark:border-slate-700 pb-3">
+<span class="text-sm text-slate-500">Genus</span>
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Betta</span>
+</div>
+<div class="flex justify-between items-center border-b border-dashed border-slate-200 dark:border-slate-700 pb-3">
+<span class="text-sm text-slate-500">Species</span>
+<span class="text-sm font-semibold text-slate-900 dark:text-white italic">B. splendens</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="text-sm text-slate-500">Region</span>
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Southeast Asia</span>
+</div>
+</div>
+</div>
+<!-- Diet Card -->
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+<div class="bg-slate-50 dark:bg-[#16202c] px-6 py-4 border-b border-border-light dark:border-border-dark">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Diet &amp; Behavior</h3>
+</div>
+<div class="p-6">
+<div class="mb-5">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Diet Type</span>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 font-medium text-sm border border-orange-500/20">
+<span class="material-symbols-outlined text-base">restaurant</span>
+                                    Carnivore
+                                </div>
+<p class="text-xs text-slate-500 mt-2">Feeds on insects and larvae. Requires high protein pellets or frozen foods like bloodworms.</p>
+</div>
+<div class="mb-5">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Temperament</span>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-600">Semi-Aggressive</span>
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-600">Territorial</span>
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-600">Solitary</span>
+</div>
+</div>
+<div>
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Swimming Level</span>
+<div class="w-full h-10 rounded bg-gradient-to-b from-primary/30 to-slate-200 dark:to-slate-800 relative">
+<div class="absolute top-1 left-2 text-[10px] text-white font-bold drop-shadow">Top / Mid</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Related Species Preview -->
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+<div class="bg-slate-50 dark:bg-[#16202c] px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Related Species</h3>
+<a class="text-xs font-medium text-primary hover:text-primary-dark" href="#">View All</a>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<a class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Blue Gourami Fish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7-_U1vUnm7VbSU1PHAshoqz-acetZdyxhi_hBGo1Gpo5QOZPfbP98E4XHQv7JHz8_mVRfjBPWOCZlQOXcJ3WfKOq9870Us1u61RKYaRTjv9-JEZb9OiXF6sXO1CkGG-GynQf7RjVDAbgF4iThJfgLhN7Zx7cXdCBb1wLbULND5s0wqW9D6J-SDD4Nov5-UKIpKtNqHA3i7TDHYbs6M-2Sk_X8W-yHzlP-Nhw_ndcm0OkMRYALTCe8sHQ9RK36l3EBFgK3nG0e-A4");'></div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Dwarf Gourami</p>
+<p class="text-xs text-slate-500">Trichogaster lalius</p>
+</div>
+</a>
+<a class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Paradise Fish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWjktdiyxYBhHDJGFVOYzRyW0yKfcjEkXEmeWbGr4DY81_VXRSSziVo-nMdRHU_iRuYwss-M-5iTTHsVqUac7XgYQo8hH0ozTHorU5PrqfWvYnzjtwRnbe_EVO9VSUlmfU97fJclWO6GGFvK4JL6EV8KyxyoOq9SYPhdl1mGf9k8AT_p9qfWwHh2UgY9grUcBtjUMX23d-eUgEFL9hls3tk2IFTLV8j0sUFMa61HxSIDItg2QPc7de26DmIkmlMuA1RLsVz9Ek-gM");'></div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Paradise Fish</p>
+<p class="text-xs text-slate-500">Macropodus opercularis</p>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-border-light dark:border-border-dark py-10 bg-surface-light dark:bg-[#101922]">
+<div class="max-w-[1280px] mx-auto px-4 text-center">
+<p class="text-slate-500 text-sm">© 2023 AquaLog. Designed for Aquarists.</p>
+</div>
+</footer>
+</div>
+</body></html>

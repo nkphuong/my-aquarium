@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { clsx } from "clsx"
 
 interface DiagnosisProps {
   diagnosisData: {
@@ -99,7 +100,10 @@ export function DiagnosisResult({ diagnosisData, onSave, onDiagnoseAgain }: Diag
       <Card className="p-8 text-center">
         <p className="text-sm text-muted-foreground mb-2">Identified Disease</p>
         <h3 className="text-4xl font-bold text-foreground mb-4">{diagnosis.disease}</h3>
-        <div className={`inline-block px-4 py-2 rounded-lg border font-semibold ${severityColor[diagnosis.severity]}`}>
+        <div className={clsx(
+          "inline-block px-4 py-2 rounded-lg border font-semibold",
+          severityColor[diagnosis.severity]
+        )}>
           {diagnosis.severity.charAt(0).toUpperCase() + diagnosis.severity.slice(1)} Severity
         </div>
       </Card>

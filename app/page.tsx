@@ -9,7 +9,7 @@ import { auth } from '@/infrastructure/auth'
 
 export default async function RootPage() {
   const session = await auth()
-
+  console.log('RootPage session:', session)
   if (session?.user) {
     redirect('/dashboard')
   } else {

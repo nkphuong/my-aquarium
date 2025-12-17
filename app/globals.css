@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "material-symbols";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -37,47 +38,56 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --surface: oklch(0.98 0 0);
 }
 
 .dark {
-  /* <CHANGE> Updated to dark aquarium theme with cyan accent */
-  --background: oklch(0.1 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.15 0.02 280);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.15 0.02 280);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.3 0.08 280);
-  --primary-foreground: oklch(0.95 0 0);
-  --secondary: oklch(0.2 0.02 280);
-  --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.25 0.01 280);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.7 0.25 180);
-  --accent-foreground: oklch(0.1 0 0);
+  /* Aquarium theme - exact OKLCH conversions from design hex codes */
+  /* #0b1121 -> background-dark */
+  --background: oklch(0.126 0.019 258);
+  --foreground: oklch(0.98 0 0);
+  /* #151e32 -> surface-dark / card */
+  --card: oklch(0.19 0.022 259);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.19 0.022 259);
+  --popover-foreground: oklch(0.98 0 0);
+  /* #22d3ee -> primary cyan */
+  --primary: oklch(0.81 0.147 200);
+  --primary-foreground: oklch(0.126 0.019 258);
+  --secondary: oklch(0.22 0.02 259);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.28 0.015 259);
+  /* #94a3b8 -> muted-foreground */
+  --muted-foreground: oklch(0.68 0.02 255);
+  /* #22d3ee -> accent cyan */
+  --accent: oklch(0.81 0.147 200);
+  --accent-foreground: oklch(0.126 0.019 258);
   --destructive: oklch(0.55 0.24 25);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.2 0.02 280);
-  --input: oklch(0.18 0.02 280);
-  --ring: oklch(0.7 0.25 180);
-  --chart-1: oklch(0.7 0.25 180);
+  --destructive-foreground: oklch(0.98 0 0);
+  /* #1e293b -> border */
+  --border: oklch(0.25 0.02 259);
+  /* #334155 -> input border darker */
+  --input: oklch(0.35 0.02 259);
+  --ring: oklch(0.81 0.147 200);
+  --chart-1: oklch(0.81 0.147 200);
   --chart-2: oklch(0.6 0.2 200);
   --chart-3: oklch(0.75 0.22 185);
   --chart-4: oklch(0.55 0.24 25);
   --chart-5: oklch(0.85 0.15 270);
-  --sidebar: oklch(0.12 0.01 280);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.7 0.25 180);
-  --sidebar-primary-foreground: oklch(0.1 0 0);
-  --sidebar-accent: oklch(0.2 0.02 280);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.2 0.02 280);
-  --sidebar-ring: oklch(0.7 0.25 180);
+  --sidebar: oklch(0.15 0.019 258);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.81 0.147 200);
+  --sidebar-primary-foreground: oklch(0.126 0.019 258);
+  --sidebar-accent: oklch(0.22 0.02 259);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(0.25 0.02 259);
+  --sidebar-ring: oklch(0.81 0.147 200);
+  --surface: oklch(0.19 0.022 259);
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans: var(--font-geist-sans), "Geist Fallback", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono Fallback", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -114,13 +124,141 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-surface: var(--surface);
+
+  /* Custom animations */
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Material Symbols icon sizes */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.icon-sm {
+  font-size: 20px;
+}
+
+.icon-md {
+  font-size: 24px;
+}
+
+.icon-lg {
+  font-size: 28px;
+}
+
+/* Tanks Page Utility Classes */
+@layer utilities {
+
+  /* Semantic color classes */
+  .text-dark-primary {
+    @apply text-[#0f172a] dark:text-white;
+  }
+
+  .text-dark-secondary {
+    @apply text-slate-500 dark:text-[#94a3b8];
+  }
+
+  .text-dark-tertiary {
+    @apply text-slate-400 dark:text-[#64748b];
+  }
+
+  .bg-surface-dark {
+    @apply bg-white dark:bg-[#152033];
+  }
+
+  .bg-surface-dark-lighter {
+    @apply bg-blue-50 dark:bg-[#1e293b];
+  }
+
+  .border-surface {
+    @apply border-blue-50 dark:border-[#1e293b];
+  }
+
+  .border-surface-light {
+    @apply border-blue-100 dark:border-transparent;
+  }
+
+  .bg-overlay-dark {
+    @apply bg-[#0b1121]/80 dark:bg-[#0b1121]/80;
+  }
+
+  .bg-gradient-overlay {
+    @apply bg-gradient-to-t from-[#152033]/80 to-transparent;
+  }
+
+  /* Border radius */
+  .rounded-card {
+    @apply rounded-[2rem];
+  }
+
+  .rounded-card-md {
+    @apply rounded-[1.5rem];
+  }
+
+  /* Icon sizes */
+  .icon-xl {
+    @apply text-3xl;
+  }
+
+  /* Card heights */
+  .min-h-card {
+    @apply min-h-[300px];
+  }
+
+  /* Shadows and glows */
+
+  /* Button styles */
+  .btn-primary-glow {
+    @apply bg-emerald-500 text-black font-bold hover:scale-105 transition-all duration-300;
+    box-shadow: 0 0 15px rgba(43, 238, 121, 0.3);
+  }
+
+  .btn-primary-glow:hover {
+    box-shadow: 0 0 25px rgba(43, 238, 121, 0.5);
+  }
+
+  .btn-card-action {
+    @apply bg-[#0f172a] dark:bg-[#1e293b] text-white hover:bg-primary hover:text-[#0b1121] transition-all;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }

@@ -5,11 +5,21 @@
  */
 
 import { User } from '../entities/user.entity';
-import { Email } from '../value-objects/email';
+
+/**
+ * Login result returned from authentication endpoints
+ * Includes user data and authentication tokens
+ */
+export interface LoginResult {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+}
 
 export interface UserRepository {
   findById(id: string): Promise<User | null>;
-  findByEmail(email: Email): Promise<User | null>;
-  findByEmailAndPassword(email: Email, password: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  loginWithEmailAndPassword(email: string, password: string): Promise<LoginResult | null>;
   save(user: User): Promise<void>;
 }
