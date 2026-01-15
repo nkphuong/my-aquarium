@@ -5,9 +5,13 @@
  *
  * Usage:
  * import { getTanksAction } from '@/app/actions'
+ * import { registerAction } from '@/app/actions'
  *
- * Note: Auth actions are handled by NextAuth (use signIn/signOut from next-auth/react)
+ * Note: For sign in/out, use signIn/signOut from next-auth/react
  */
 
 // Tank actions
 export * from './tank.actions'
+
+// Auth actions
+export * from './auth.actions'

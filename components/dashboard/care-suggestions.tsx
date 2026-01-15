@@ -1,10 +1,11 @@
 "use client"
 
-import { ArrowRight, Lightbulb, Wrench } from "lucide-react"
+import { ArrowRight, Lightbulb, Wrench, Sparkles } from "lucide-react"
+import { clsx } from "clsx"
 
 /**
  * Care Suggestions Section
- * Displays AI-powered care suggestions and maintenance alerts
+ * Displays AI-powered care suggestions with pastel styling
  */
 
 interface SuggestionCardProps {
@@ -13,7 +14,15 @@ interface SuggestionCardProps {
     description: string
     actionLabel: string
     onAction?: () => void
-    variant: "gradient" | "alert"
+    variant: "tip" | "alert"
+    pastelColor: "sage" | "peach" | "yellow" | "purple"
+}
+
+const pastelColorMap = {
+    sage: "bg-pastel-sage",
+    peach: "bg-pastel-peach",
+    yellow: "bg-pastel-yellow",
+    purple: "bg-pastel-purple",
 }
 
 function SuggestionCard({
@@ -23,40 +32,46 @@ function SuggestionCard({
     actionLabel,
     onAction,
     variant,
+    pastelColor,
 }: SuggestionCardProps) {
-    if (variant === "gradient") {
-        return (
-            <div className="bg-gradient-to-br from-sky-900 to-sky-700 p-5 rounded-xl border border-cyan-500/20 relative overflow-hidden group">
-                <div className="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl group-hover:bg-cyan-500/20 transition-all" />
-                <div className="flex items-start gap-3 relative z-10">
-                    <div className="text-cyan-400">{icon}</div>
-                    <div>
-                        <h4 className="text-white font-bold text-sm mb-1">{title}</h4>
-                        <p className="text-gray-300 text-xs leading-relaxed mb-3">{description}</p>
-                        <button
-                            onClick={onAction}
-                            className="text-cyan-400 hover:text-white text-xs font-bold uppercase tracking-wide flex items-center gap-1 transition-colors"
-                        >
-                            {actionLabel} <ArrowRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
     return (
-        <div className="bg-red-50 dark:bg-red-900/10 p-5 rounded-xl border border-red-200 dark:border-red-900/30">
-            <div className="flex items-start gap-3">
-                <div className="text-red-500">{icon}</div>
-                <div>
+        <div
+            className={clsx(
+                "p-4 rounded-2xl relative overflow-hidden transition-all hover:scale-[1.01]",
+                variant === "alert"
+                    ? "bg-pastel-peach ring-1 ring-destructive/20"
+                    : pastelColorMap[pastelColor]
+            )}
+        >
+            {/* Decorative blob */}
+            <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/30 rounded-full blur-xl" />
+
+            <div className="flex items-start gap-3 relative z-10">
+                <div
+                    className={clsx(
+                        "p-2 rounded-xl",
+                        variant === "alert"
+                            ? "bg-destructive/10 text-destructive"
+                            : "bg-white/50 text-primary"
+                    )}
+                >
+                    {icon}
+                </div>
+                <div className="flex-1">
                     <h4 className="text-foreground font-bold text-sm mb-1">{title}</h4>
-                    <p className="text-muted-foreground text-xs leading-relaxed mb-3">{description}</p>
+                    <p className="text-foreground/70 text-xs leading-relaxed mb-3">
+                        {description}
+                    </p>
                     <button
                         onClick={onAction}
-                        className="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                        className={clsx(
+                            "text-xs font-bold uppercase tracking-wide flex items-center gap-1 transition-all hover:gap-2",
+                            variant === "alert"
+                                ? "text-destructive hover:text-destructive/80"
+                                : "text-primary hover:text-primary/80"
+                        )}
                     >
-                        {actionLabel}
+                        {actionLabel} <ArrowRight className="w-3 h-3" />
                     </button>
                 </div>
             </div>
@@ -99,24 +114,30 @@ export function CareSuggestions({ suggestions }: CareSuggestionsProps) {
 
     const items = suggestions || defaultSuggestions
 
+    const pastelColors: Array<"sage" | "yellow" | "purple"> = ["sage", "yellow", "purple"]
+
     return (
         <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-foreground">Care Suggestions</h2>
+            <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-primary" />
+                <h2 className="text-xl font-bold text-foreground">Care Suggestions</h2>
+            </div>
             <div className="flex flex-col gap-3">
-                {items.map((suggestion) => (
+                {items.map((suggestion, index) => (
                     <SuggestionCard
                         key={suggestion.id}
                         icon={
                             suggestion.priority === "high" ? (
-                                <Wrench className="w-6 h-6" />
+                                <Wrench className="w-5 h-5" />
                             ) : (
-                                <Lightbulb className="w-6 h-6" />
+                                <Lightbulb className="w-5 h-5" />
                             )
                         }
                         title={suggestion.title}
                         description={suggestion.description}
                         actionLabel={suggestion.actionLabel}
-                        variant={suggestion.priority === "high" ? "alert" : "gradient"}
+                        variant={suggestion.priority === "high" ? "alert" : "tip"}
+                        pastelColor={pastelColors[index % pastelColors.length]}
                     />
                 ))}
             </div>

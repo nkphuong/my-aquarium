@@ -1,24 +1,25 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Plus_Jakarta_Sans, Inter } from "next/font/google"
 import { AuthSessionProvider } from "@/components/providers/session-provider"
 import { Toaster } from "sonner"
 import { clsx } from "clsx"
 import "./globals.css"
 
-const geist = Geist({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-heading",
+  weight: ["500", "600", "700", "800"],
 })
 
-const geistMono = Geist_Mono({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-body",
 })
 
 export const metadata: Metadata = {
-  title: "AquaCare - Aquarium Management",
-  description: "Real-time aquarium monitoring, health management, and fish disease diagnosis",
+  title: "AquaHeart - Care That Comes from the Heart",
+  description: "Your fish are waiting for you. Give them the love they deserve with AI-powered aquarium management.",
   // icons: {
   //   icon: [
   //     {
@@ -44,8 +45,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={clsx(geist.variable, geistMono.variable, "font-sans antialiased")}>
+    <html lang="en" className="light">
+      <body className={clsx(plusJakarta.variable, inter.variable, "font-sans antialiased")}>
         <AuthSessionProvider>{children}</AuthSessionProvider>
         <Toaster richColors position="top-right" />
       </body>

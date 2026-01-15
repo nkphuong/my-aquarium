@@ -6,6 +6,5 @@
 
 export interface User {
   id: string
-  authId: string
   fullname?: string
 }

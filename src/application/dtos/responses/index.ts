@@ -6,4 +6,7 @@
  */
 
 // Auth responses
-export * from './auth/login.response'
+export * from './auth/auth.response'
+
+// Tank responses
+export * from './tank'

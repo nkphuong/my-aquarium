@@ -1,7 +1,6 @@
 import type React from "react"
 import { redirect } from "next/navigation"
 import { auth } from "@/infrastructure/auth"
-import { AppSidebar } from "@/components/app-sidebar"
 import AppHeader from "@/components/app-header"
 import { SessionMonitor } from "@/components/providers/session-monitor"
 
@@ -23,14 +22,14 @@ export default async function AuthenticatedLayout({
   if (!session?.user) {
     redirect("/login")
   }
-
+  console.log(session)
   return (
     <>
       <SessionMonitor />
       <div className="min-h-screen bg-background flex flex-col">
-        <AppHeader />
+        <AppHeader user={{ name: session?.fullname || "" }} />
         <main className="flex-1">
-          <div className="p-6 md:p-8 pt-0 w-full">
+          <div className="px-6 md:px-8 pt-0 w-full">
             {children}
           </div>
         </main>

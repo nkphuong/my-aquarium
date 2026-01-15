@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 
 const COMMON_SYMPTOMS = [
   { id: "torn-fins", label: "Torn/Frayed Fins" },
@@ -65,16 +67,16 @@ export function SymptomForm({ tankName, onSubmit, onBack }: SymptomFormProps) {
         </div>
 
         <div className="border-t border-border pt-6">
-          <label className="block mb-3">
-            <span className="text-sm font-semibold text-foreground mb-2 block">Other Symptoms (Optional)</span>
-            <textarea
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="otherSymptoms">Other Symptoms (Optional)</Label>
+            <Textarea
+              id="otherSymptoms"
               value={otherSymptoms}
               onChange={(e) => setOtherSymptoms(e.target.value)}
               placeholder="Describe any other symptoms..."
-              className="w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent resize-none"
               rows={3}
             />
-          </label>
+          </div>
         </div>
       </Card>
 

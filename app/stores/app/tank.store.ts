@@ -13,9 +13,9 @@
 import { create } from 'zustand'
 import {
   getTanksAction,
-  // createTankAction 
+  createTankAction
 } from '@/app/actions'
-import type { Tank } from '@/app/types'
+import type { Tank, CreateTankRequest } from '@/app/types'
 
 interface TankStoreState {
   tanks: Tank[]
@@ -25,9 +25,9 @@ interface TankStoreState {
   lastFetchTime: number | null
 
   // Actions
-  fetchTanks: (jwt: string, force?: boolean) => Promise<void>
+  fetchTanks: (jwt: string, keyword?: string, type?: string, style?: string, force?: boolean) => Promise<void>
   ensureTanksFetched: (jwt: string) => Promise<void>
-  // createTank: (request: CreateTankRequestDTO, jwt: string) => Promise<void>
+  createTank: (request: CreateTankRequest, jwt: string) => Promise<void>
   clearError: () => void
 }
 
@@ -59,7 +59,7 @@ export const useTankStore = create<TankStoreState>((set, get) => ({
    * @param jwt - Authentication token
    * @param force - Force fetch even if already loading (default: false)
    */
-  fetchTanks: async (jwt: string, force = false) => {
+  fetchTanks: async (jwt: string, keyword?: string, type?: string, style?: string, force = false) => {
     const state = get()
 
     // Prevent duplicate fetches (unless forced)
@@ -73,8 +73,8 @@ export const useTankStore = create<TankStoreState>((set, get) => ({
     })
 
     try {
-      const result = await getTanksAction(jwt)
-
+      const result = await getTanksAction(jwt, keyword, type, style)
+      // console.log(result)
       if (result.success && result.tanks) {
         set({
           tanks: result.tanks,
@@ -131,37 +131,37 @@ export const useTankStore = create<TankStoreState>((set, get) => ({
     }
   },
 
-  // createTank: async (request: CreateTankRequestDTO, jwt: string) => {
-  //   set({
-  //     isLoading: true, 
-  //     error: null
-  //   })
+  createTank: async (request: CreateTankRequest, jwt: string) => {
+    set({
+      isLoading: true,
+      error: null
+    })
 
-  //   try {
-  //     // ✅ Call server action
-  //     const result = await createTankAction(request, jwt)
+    try {
+      // ✅ Call server action
+      const result = await createTankAction(request, jwt)
 
-  //     if (result.success && result.tank) {
-  //       // Add new tank to the list
-  //       set((state) => ({
-  //         tanks: [...state.tanks, result.tank!],
-  //         isLoading: false, 
-  //         error: null   
-  //       }))
-  //     } else {
-  //       set({
-  //          isLoading: false, 
-  //          error: result.error || 'Failed to create tank' 
-  //       })
-  //     }
-  //   } catch (error) {
-  //     set({
-  //        isLoading: false,
-  //        error: error instanceof Error ? error.message : 'Unknown error'
+      if (result.success && result.tank) {
+        // Add new tank to the list
+        set((state) => ({
+          tanks: [...state.tanks, result.tank!],
+          isLoading: false,
+          error: null
+        }))
+      } else {
+        set({
+          isLoading: false,
+          error: result.error || 'Failed to create tank'
+        })
+      }
+    } catch (error) {
+      set({
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
 
-  //     })
-  //   }
-  // },
+      })
+    }
+  },
 
   clearError: () => {
     set((state) => ({

@@ -15,7 +15,8 @@
  */
 
 import { getService } from '@/infrastructure/di'
-import type { GetTanksResponseDTO, CreateTankRequestDTO, CreateTankResponseDTO } from '@/app/types/tank.types'
+import type { CreateTankRequest } from '@/application/dtos/requests'
+import type { GetTanksResponse, CreateTankResponse } from '@/application/dtos/responses'
 
 /**
  * Get Tanks Action
@@ -23,23 +24,15 @@ import type { GetTanksResponseDTO, CreateTankRequestDTO, CreateTankResponseDTO }
  * Fetches all tanks for the authenticated user.
  * Calls TankService and serializes the response to plain objects for the client.
  */
-export async function getTanksAction(jwt: string): Promise<GetTanksResponseDTO> {
+export async function getTanksAction(jwt: string, keyword?: string, type?: string, style?: string): Promise<GetTanksResponse> {
   try {
     // Call application service (server-side)
     const tankService = getService('TankService')
-    const tanks = await tankService.findAllMyTanks(jwt)
-
+    const tanks = await tankService.findAllMyTanks(jwt, keyword, type, style)
     // Serialize domain entities to client DTOs (plain objects)
     return {
       success: true,
-      tanks: tanks.map(tank => ({
-        id: tank.id,
-        name: tank.name,
-        width: tank.width,
-        height: tank.height,
-        length: tank.length,
-        userId: tank.userId
-      }))
+      tanks
     }
   } catch (error) {
     console.error('[getTanksAction] Error:', error)
@@ -56,40 +49,35 @@ export async function getTanksAction(jwt: string): Promise<GetTanksResponseDTO> 
  * Creates a new tank for the authenticated user.
  * Calls TankService and serializes the response to plain objects for the client.
  */
-// export async function createTankAction(
-//   request: CreateTankRequestDTO,
-//   jwt: string
-// ): Promise<CreateTankResponseDTO> {
-//   try {
-//     // Call application service (server-side)
-//     const tankService = getService('TankService')
-//     const tank = await tankService.create(
-//       {
-//         name: request.name,
-//         width: request.width,
-//         height: request.height,
-//         length: request.length
-//       },
-//       jwt
-//     )
+export async function createTankAction(
+  request: CreateTankRequest,
+  jwt: string
+): Promise<CreateTankResponse> {
+  try {
+    // Call application service (server-side)
+    const tankService = getService('TankService')
+    const tank = await tankService.create(
+      request,
+      jwt
+    )
 
-//     // Serialize domain entity to client DTO (plain object)
-//     return {
-//       success: true,
-//       tank: {
-//         id: tank.id,
-//         name: tank.name,
-//         width: tank.width,
-//         height: tank.height,
-//         length: tank.length,
-//         userId: tank.userId
-//       }
-//     }
-//   } catch (error) {
-//     console.error('[createTankAction] Error:', error)
-//     return {
-//       success: false,
-//       error: error instanceof Error ? error.message : 'Failed to create tank'
-//     }
-//   }
-// }
+    // Serialize domain entity to client DTO (plain object)
+    return {
+      success: true,
+      tank: {
+        id: tank.id,
+        name: tank.name,
+        width: tank.width,
+        height: tank.height,
+        length: tank.length,
+        userId: tank.userId
+      }
+    }
+  } catch (error) {
+    console.error('[createTankAction] Error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create tank'
+    }
+  }
+}

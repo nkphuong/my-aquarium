@@ -281,6 +281,12 @@ import { cn } from '@/lib/utils'
 - Uses CSS variables for theming
 - Dark mode supported via class-based strategy
 
+### Dashboard Styling
+- **Theme**: Light mode only (bright, playful, pastel) - `className="light"` on `<html>`
+- **Pastel Colors**: `pastel-sage`, `pastel-peach`, `pastel-cream`, `pastel-yellow`, `pastel-purple`, `pastel-coral`
+- **Stats Cards**: Use pastel backgrounds with white decorative blobs
+- **Reference**: See `docs/DASHBOARD_STYLING.md` for comprehensive guide
+
 ### shadcn/ui Integration
 - Configuration: [components.json](components.json)
 - Style: "new-york"
@@ -362,6 +368,9 @@ See [src/infrastructure/di/README.md](src/infrastructure/di/README.md) for detai
   - `SETUP_COMPLETE.md` - Setup checklist
 - **`CLAUDE.md`** (root) - Quick reference for development
 - **`README.md`** (root) - Project overview
+- **`aquacompanion-srs-v2.docx.md`** - SRS document
+
+
 
 ### Route Groups
 - **`app/(authenticated)/`** - Protected routes requiring login

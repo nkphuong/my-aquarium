@@ -7,15 +7,15 @@
  */
 
 import { User } from '@/domain/entities/user.entity'
-import { UserRepository, LoginResult } from '@/domain/repositories/user.repository'
+import { UserRepository, AuthResult } from '@/domain/repositories/user.repository'
+import { AuthError } from '@/domain/errors/auth.errors'
 import { createHttpClient } from '@/src-lib/http/http-client'
 
-export interface NestJsLoginResponse {
+export interface NestJsAuthResponse {
   success: boolean;
   data?: {
     user?: {
       id: string;
-      authId: string;
       fullname?: string;
     };
     accessToken?: string;
@@ -25,6 +25,7 @@ export interface NestJsLoginResponse {
   message?: string;
   error?: string;
 }
+
 
 // Create HTTP client instance for NestJS API
 const apiClient = createHttpClient(
@@ -61,29 +62,132 @@ export class NestJSUserRepository implements UserRepository {
   async loginWithEmailAndPassword(
     email: string,
     password: string
-  ): Promise<LoginResult | null> {
+  ): Promise<AuthResult> {
     try {
       // Call NestJS login endpoint with builder pattern
       const res = await apiClient
         .post('/auth/login')
         .withBody({ email, password })
-          .send<NestJsLoginResponse>()
+        .send<NestJsAuthResponse>()
 
       const data = res.data
-      // Return complete login result with tokens
-      if (data?.user && data?.accessToken) {
-        return {
-          user: this.toDomain(data.user),
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken || '',
-          expiresIn: data.expiresIn || 3600, // Default to 1 hour if not provided
-        }
+
+      // Validate response has required fields
+      if (!data?.user || !data?.accessToken) {
+        throw new AuthError('Invalid response from server', 'SERVER_ERROR')
       }
 
-      return null
+      return {
+        user: this.toDomain(data.user),
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken || '',
+        expiresIn: data.expiresIn || 3600,
+      }
     } catch (error) {
-      console.error('Error during login:', error)
-      return null
+      // Re-throw if already AuthError
+      if (error instanceof AuthError) {
+        throw error
+      }
+
+      // Convert HTTP errors to AuthError
+      const httpError = error as { status?: number; message?: string }
+      if (httpError.status === 401) {
+        throw new AuthError(
+          httpError.message || 'Invalid email or password',
+          'INVALID_CREDENTIALS'
+        )
+      }
+
+      throw new AuthError(
+        httpError.message || 'Login failed. Please try again.',
+        'SERVER_ERROR'
+      )
+    }
+  }
+
+  async registerWithEmailAndPassword(email: string, password: string, name?: string): Promise<AuthResult> {
+    try {
+      // Call NestJS register endpoint with builder pattern
+      const res = await apiClient
+        .post('/auth/register')
+        .withBody({ email, password, name })
+        .send<NestJsAuthResponse>()
+
+      const data = res.data
+
+      // Validate response has required fields
+      if (!data?.user || !data?.accessToken) {
+        throw new AuthError('Invalid response from server', 'SERVER_ERROR')
+      }
+
+      return {
+        user: this.toDomain(data.user),
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken || '',
+        expiresIn: data.expiresIn || 3600,
+      }
+    } catch (error) {
+      // Re-throw if already AuthError
+      if (error instanceof AuthError) {
+        throw error
+      }
+
+      // Convert HTTP errors to AuthError
+      const httpError = error as { status?: number; message?: string }
+      if (httpError.status === 409) {
+        throw new AuthError(
+          httpError.message || 'Email already exists',
+          'EMAIL_ALREADY_EXISTS'
+        )
+      }
+
+      throw new AuthError(
+        httpError.message || 'Registration failed. Please try again.',
+        'SERVER_ERROR'
+      )
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<AuthResult> {
+    try {
+      // Call NestJS refresh endpoint with builder pattern
+      const res = await apiClient
+        .post('/auth/refresh')
+        .withBody({ refreshToken })
+        .send<NestJsAuthResponse>()
+
+      const data = res.data
+
+      // Validate response has required fields
+      if (!data?.user || !data?.accessToken) {
+        throw new AuthError('Invalid response from server', 'SERVER_ERROR')
+      }
+
+      return {
+        user: this.toDomain(data.user),
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken || '',
+        expiresIn: data.expiresIn || 3600,
+      }
+    } catch (error) {
+      // Re-throw if already AuthError
+      if (error instanceof AuthError) {
+        throw error
+      }
+
+      // Convert HTTP errors to AuthError
+      const httpError = error as { status?: number; message?: string }
+      if (httpError.status === 401) {
+        throw new AuthError(
+          httpError.message || 'Token expired or invalid',
+          'TOKEN_EXPIRED'
+        )
+      }
+
+      throw new AuthError(
+        httpError.message || 'Token refresh failed. Please login again.',
+        'SERVER_ERROR'
+      )
     }
   }
 
@@ -93,7 +197,6 @@ export class NestJSUserRepository implements UserRepository {
         .post('/users')
         .withBody({
           id: user.id,
-          authId: user.authId,
           fullname: user.fullname,
         })
         .send()
@@ -106,7 +209,6 @@ export class NestJSUserRepository implements UserRepository {
   private toDomain(data: any): User {
     return {
       id: data.id,
-      authId: data.authId,
       fullname: data.fullname,
     }
   }

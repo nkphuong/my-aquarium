@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Search, Plus, Fish, Leaf, Calendar, Lightbulb, Droplets } from "lucide-react"
 import TankCardList from "@/components/tanks/tank-card-list"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { clsx } from "clsx"
 
 /**
@@ -52,13 +53,15 @@ export default function TanksPage() {
   const [activeFilter, setActiveFilter] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
   const { data: session } = useSession();
+  const router = useRouter()
+
   // Filter tanks based on active filter and search
   const handleClickCreateTank = () => {
-    console.log("click create tank")
+    router.push('/tanks/create')
   }
 
   return (
-    <div className="flex flex-col mx-auto gap-8">
+    <div className="flex flex-col mx-auto w-full max-w-7xl px-6 py-8 md:px-12 md:py-12 gap-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border">
         <div className="flex flex-col gap-2">

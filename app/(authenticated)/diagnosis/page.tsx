@@ -5,6 +5,7 @@ import { TankSelector } from "@/components/diagnosis/tank-selector"
 import { SymptomForm } from "@/components/diagnosis/symptom-form"
 import { DiagnosisResult } from "@/components/diagnosis/diagnosis-result"
 import { DiagnosisHistory } from "@/components/diagnosis/diagnosis-history"
+import { Button } from "@/components/ui/button"
 
 type DiagnosisStep = "tank-select" | "symptoms" | "result" | "saved"
 
@@ -92,12 +93,9 @@ export default function DiagnosisPage() {
               <h2 className="text-2xl font-bold text-foreground mb-2">Prescription Saved</h2>
               <p className="text-muted-foreground mb-6">Your diagnosis has been added to the tank history</p>
             </div>
-            <button
-              onClick={handleDiagnoseAgain}
-              className="px-6 py-2 bg-accent text-accent-foreground rounded-lg font-semibold hover:opacity-90 transition"
-            >
+            <Button onClick={handleDiagnoseAgain}>
               New Diagnosis
-            </button>
+            </Button>
           </div>
         )}
       </div>

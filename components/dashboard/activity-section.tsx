@@ -1,11 +1,11 @@
 "use client"
 
-import { Beaker, Scissors, UtensilsCrossed, LucideIcon } from "lucide-react"
+import { Beaker, Scissors, UtensilsCrossed, LucideIcon, Clock } from "lucide-react"
 import { clsx } from "clsx"
 
 /**
  * Activity Section Component
- * Displays recent activity log with color-coded icons
+ * Displays recent activity log with pastel-colored icons
  */
 
 type ActivityType = "testing" | "feeding" | "maintenance"
@@ -28,26 +28,30 @@ const activityConfig: Record<
 > = {
     testing: {
         icon: Beaker,
-        bgColor: "bg-blue-100 dark:bg-blue-900/30",
-        iconColor: "text-blue-600 dark:text-blue-400",
+        bgColor: "bg-pastel-sage",
+        iconColor: "text-emerald-700",
     },
     feeding: {
         icon: UtensilsCrossed,
-        bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
-        iconColor: "text-emerald-600 dark:text-emerald-400",
+        bgColor: "bg-pastel-yellow",
+        iconColor: "text-amber-700",
     },
     maintenance: {
         icon: Scissors,
-        bgColor: "bg-purple-100 dark:bg-purple-900/30",
-        iconColor: "text-purple-600 dark:text-purple-400",
+        bgColor: "bg-pastel-purple",
+        iconColor: "text-purple-700",
     },
 }
 
 export function ActivitySection({ activities }: ActivitySectionProps) {
     return (
         <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
-            <div className="bg-card rounded-xl border border-border p-4">
+            <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-primary" />
+                <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
+            </div>
+
+            <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
                 {activities.map((activity, index) => {
                     const config = activityConfig[activity.type]
                     const Icon = config.icon
@@ -56,27 +60,44 @@ export function ActivitySection({ activities }: ActivitySectionProps) {
                         <div
                             key={activity.id}
                             className={clsx(
-                                "flex gap-4 p-3 items-start",
+                                "flex gap-4 p-4 items-start transition-colors hover:bg-muted/30",
                                 index < activities.length - 1 && "border-b border-border"
                             )}
                         >
-                            <div className={clsx(
-                                "p-2 rounded-lg mt-1",
-                                config.bgColor,
-                                config.iconColor
-                            )}>
+                            <div
+                                className={clsx(
+                                    "p-2.5 rounded-xl",
+                                    config.bgColor,
+                                    config.iconColor
+                                )}
+                            >
                                 <Icon className="w-5 h-5" />
                             </div>
-                            <div className="flex flex-col flex-1">
-                                <div className="flex justify-between items-start">
-                                    <h4 className="text-foreground font-semibold text-sm">{activity.title}</h4>
-                                    <span className="text-xs text-muted-foreground">{activity.timestamp}</span>
+                            <div className="flex flex-col flex-1 min-w-0">
+                                <div className="flex justify-between items-start gap-2">
+                                    <h4 className="text-foreground font-semibold text-sm truncate">
+                                        {activity.title}
+                                    </h4>
+                                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+                                        {activity.timestamp}
+                                    </span>
                                 </div>
-                                <p className="text-muted-foreground text-sm">{activity.description}</p>
+                                <p className="text-muted-foreground text-sm mt-0.5 line-clamp-2">
+                                    {activity.description}
+                                </p>
                             </div>
                         </div>
                     )
                 })}
+
+                {activities.length === 0 && (
+                    <div className="p-8 text-center">
+                        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-pastel-sage flex items-center justify-center">
+                            <Clock className="w-6 h-6 text-emerald-700" />
+                        </div>
+                        <p className="text-muted-foreground text-sm">No recent activity</p>
+                    </div>
+                )}
             </div>
         </div>
     )

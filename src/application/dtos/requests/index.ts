@@ -7,3 +7,7 @@
 
 // Auth requests
 export * from './auth/login.request'
+export * from './auth/register.request'
+
+// Tank requests
+export * from './tank'

@@ -21,13 +21,13 @@ export default function TankCard({ tank }: { tank: Tank }) {
                             "inline-flex items-center gap-1.5 px-3 py-1 rounded-full",
                             "bg-overlay-dark backdrop-blur-sm border border-surface",
                             "text-xs font-bold",
-                            tank.status === "healthy" && "bg-emerald-500",
-                            tank.status === "warning" && "bg-yellow-500",
-                            tank.status === "critical" && "bg-red-500"
+                            tank.status === "healthy" && "bg-secondary text-secondary-foreground",
+                            tank.status === "warning" && "bg-accent text-accent-foreground",
+                            tank.status === "critical" && "bg-destructive text-destructive-foreground"
                         )}
                     >
                         {tank.status === "healthy" ? (
-                            <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <span className="size-2 rounded-full bg-white animate-pulse" />
                         ) : (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -43,7 +43,7 @@ export default function TankCard({ tank }: { tank: Tank }) {
                 </div>
                 <div
                     className="w-full h-full bg-center bg-no-repeat bg-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    style={{ backgroundImage: `url("${tank.avatar}")` }}
+                    style={tank.avatar ? { backgroundImage: `url("${tank.avatar}")` } : undefined}
                 />
             </div>
 

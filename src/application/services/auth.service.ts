@@ -5,48 +5,86 @@
  */
 
 import { UserRepository } from '@/domain/repositories/user.repository';
-import { LoginRequest } from '@/application/dtos/requests/auth/login.request';
-import { LoginResponse } from '@/application/dtos/responses/auth/login.response';
+import { AuthError } from '@/domain/errors/auth.errors';
+import { LoginRequest, RegisterRequest, AuthResponse } from '@/application/dtos/';
 
 export class AuthService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
   /**
    * Authenticate a user with email and password
-   * Returns LoginResponse with user data on success
+   * @throws {AuthError} on invalid credentials or server error
    */
-  async login(request: LoginRequest): Promise<LoginResponse> {
+  async login(request: LoginRequest): Promise<AuthResponse> {
     // Validate email format
     if (!this.isValidEmail(request.email)) {
-      return {
-        success: false,
-        error: 'Invalid email format'
-      };
+      throw new AuthError('Invalid email format', 'INVALID_EMAIL')
     }
 
-    // Login and get user + tokens
+    // Login via repository - throws AuthError on failure
     const loginResult = await this.userRepository.loginWithEmailAndPassword(
       request.email,
       request.password
     );
 
-    if (!loginResult) {
-      return {
-        success: false,
-        error: 'Invalid email or password'
-      };
-    }
-
     return {
       success: true,
       user: {
         id: loginResult.user.id,
-        authId: loginResult.user.authId,
         fullname: loginResult.user.fullname
       },
       accessToken: loginResult.accessToken,
       refreshToken: loginResult.refreshToken,
       expiresIn: loginResult.expiresIn
+    };
+  }
+
+  /**
+   * Register a new user
+   * @throws {AuthError} on email exists or validation error
+   */
+  async register(request: RegisterRequest): Promise<AuthResponse> {
+    // Validate email format
+    if (!this.isValidEmail(request.email)) {
+      throw new AuthError('Invalid email format', 'INVALID_EMAIL')
+    }
+
+    // Register via repository - throws AuthError on failure
+    const registerResult = await this.userRepository.registerWithEmailAndPassword(
+      request.email,
+      request.password,
+      request.name
+    );
+
+    return {
+      success: true,
+      user: {
+        id: registerResult.user.id,
+        fullname: registerResult.user.fullname
+      },
+      accessToken: registerResult.accessToken,
+      refreshToken: registerResult.refreshToken,
+      expiresIn: registerResult.expiresIn
+    };
+  }
+
+  /**
+   * Refresh access token
+   * @throws {AuthError} on invalid/expired token
+   */
+  async refreshToken(refreshToken: string): Promise<AuthResponse> {
+    // Refresh via repository - throws AuthError on failure
+    const refreshTokenResult = await this.userRepository.refreshToken(refreshToken);
+
+    return {
+      success: true,
+      user: {
+        id: refreshTokenResult.user.id,
+        fullname: refreshTokenResult.user.fullname
+      },
+      accessToken: refreshTokenResult.accessToken,
+      refreshToken: refreshTokenResult.refreshToken,
+      expiresIn: refreshTokenResult.expiresIn
     };
   }
 

@@ -162,7 +162,7 @@ export class HttpClient {
 
     try {
       const response = await fetch(url, options)
-
+      console.log(response)
       // Handle non-OK responses
       if (!response.ok) {
         const error = await this.handleError(response)
@@ -248,8 +248,8 @@ export class HttpClient {
     }
 
     const error = new Error(message)
-    ;(error as any).status = response.status
-    ;(error as any).response = response
+      ; (error as any).status = response.status
+      ; (error as any).response = response
     return error
   }
 }

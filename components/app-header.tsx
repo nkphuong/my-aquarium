@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function AppHeader() {
+export default function AppHeader(user: { name?: string }) {
+
   async function handleLogout() {
     await signOut({ callbackUrl: '/login' })
   }
@@ -33,7 +34,7 @@ export default function AppHeader() {
           </svg>
         </div>
         <h2 className="text-foreground text-xl font-bold leading-tight tracking-[-0.015em]">
-          AquaCare
+          AquaHeart
         </h2>
       </div>
 
@@ -69,7 +70,7 @@ export default function AppHeader() {
         </button>
         <div className="flex items-center gap-3 pl-3 border-l border-border">
           <span className="hidden sm:block text-sm font-bold text-foreground">
-            Alex Waterfield
+            {user?.name}
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

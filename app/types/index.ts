@@ -5,9 +5,11 @@
  *
  * Usage:
  * import { ClientTank, GetTanksResponseDTO } from '@/app/types'
- *
- * Note: Auth types are managed by NextAuth (see types/next-auth.d.ts)
+ * import { RegisterRequestDTO, ClientUser } from '@/app/types'
  */
 
 // Tank types
 export * from './tank.types'
+
+// Auth types
+export * from './auth.types'

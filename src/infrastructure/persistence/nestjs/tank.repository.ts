@@ -9,6 +9,7 @@
 import { TankRepository } from '@/domain/repositories'
 import { createHttpClient } from '@/src/lib/http/http-client'
 import { Tank } from '@/srcdomain/entities/tank.entity';
+import type { CreateTankRequest } from '@/application/dtos/requests';
 
 export interface NestJsTankResponse {
   success: boolean;
@@ -22,7 +23,13 @@ interface NestJsTankData {
   width: number;
   height: number;
   length: number;
-  userId: number
+  userId: number;
+  status?: string;
+  avatar?: string;
+  description?: string;
+  setup_at?: string;
+  type?: string;
+  style?: string;
 }
 
 // Create HTTP client instance for NestJS API
@@ -31,13 +38,27 @@ const apiClient = createHttpClient(
 )
 
 export class NestJSTankRepository implements TankRepository {
-  async findAllMyTanks(jwt: string): Promise<Tank[]> {
+  async findAllMyTanks(jwt: string, keyword?: string, type?: string, style?: string): Promise<Tank[]> {
     const response = await apiClient
       .get('/tank/my-tanks')
       .withAuth(jwt)
+      .withParams({ keyword, type, style })
+      .send<NestJsTankResponse>()
+    return this.toDomainArray(response.data || []);
+  }
+
+  async create(request: CreateTankRequest, jwt: string): Promise<Tank> {
+    const response = await apiClient
+      .post('/tank')
+      .withAuth(jwt)
+      .withBody(request)
       .send<NestJsTankResponse>()
 
-    return this.toDomainArray(response.data || []);
+    if (!response.success || !response.data || response.data.length === 0) {
+      throw new Error(response.error || 'Failed to create tank');
+    }
+
+    return this.toDomain(response.data[0])
   }
 
   private toDomainArray(data: NestJsTankData[]): Tank[] {
@@ -47,12 +68,7 @@ export class NestJSTankRepository implements TankRepository {
 
   private toDomain(data: NestJsTankData): Tank {
     return {
-      id: data.id,
-      name: data.name,
-      width: data.width,
-      height: data.height,
-      length: data.length,
-      userId: data.userId,
+      ...data
     }
   }
 }
