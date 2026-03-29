@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MoreVertical } from "lucide-react";
-import { Tank } from "@/app/types";
+import type { Tank } from "@/lib/types";
 import { clsx } from "clsx";
 
 
@@ -73,7 +73,7 @@ export default function TankCard({ tank }: { tank: Tank }) {
 
                 {/* Footer */}
                 <div className="flex items-center justify-between mt-auto">
-                    <span className="text-xs font-medium text-dark-tertiary">Est. {tank.setup_at}</span>
+                    <span className="text-xs font-medium text-dark-tertiary">Est. {tank.setupAt}</span>
                     <Link
                         href={`/tanks/${tank.id}`}
                         className="flex items-center justify-center rounded-full btn-card-action h-10 px-5 text-sm font-bold"

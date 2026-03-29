@@ -28,17 +28,17 @@ const activityConfig: Record<
 > = {
     testing: {
         icon: Beaker,
-        bgColor: "bg-pastel-sage",
-        iconColor: "text-emerald-700",
+        bgColor: "bg-warm-seafoam/20",
+        iconColor: "text-primary",
     },
     feeding: {
         icon: UtensilsCrossed,
-        bgColor: "bg-pastel-yellow",
+        bgColor: "bg-warm-gold/10",
         iconColor: "text-amber-700",
     },
     maintenance: {
         icon: Scissors,
-        bgColor: "bg-pastel-purple",
+        bgColor: "bg-primary/5",
         iconColor: "text-purple-700",
     },
 }
@@ -92,8 +92,8 @@ export function ActivitySection({ activities }: ActivitySectionProps) {
 
                 {activities.length === 0 && (
                     <div className="p-8 text-center">
-                        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-pastel-sage flex items-center justify-center">
-                            <Clock className="w-6 h-6 text-emerald-700" />
+                        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Clock className="w-6 h-6 text-primary" />
                         </div>
                         <p className="text-muted-foreground text-sm">No recent activity</p>
                     </div>

@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,19 +25,27 @@
       }
     ],
     "paths": {
-      "@/app/*": ["./app/*"],
-      "@/actions/*": ["./app/actions/*"],
-      "@/stores/*": ["./app/stores/*"],
-      "@/app/types/*": ["./app/types/*"],
-      "@/src*": ["./src/*"],
-      "@/types": ["./src/types"],
-      "@/domain/*": ["./src/domain/*"],
-      "@/application/*": ["./src/application/*"],
-      "@/dtos/*": ["./src/application/dtos/*"],
-      "@/infrastructure/*": ["./src/infrastructure/*"],
-      "@/components/*": ["./components/*"],
-      "@/lib/*": ["./lib/*"],
-      "@/src-lib/*": ["./src/lib/*"]
+      "@/app/*": [
+        "./app/*"
+      ],
+      "@/actions/*": [
+        "./app/actions/*"
+      ],
+      "@/stores/*": [
+        "./app/stores/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/hooks/*": [
+        "./hooks/*"
+      ],
+      "@/lib/*": [
+        "./lib/*"
+      ],
+      "@/engines/*": [
+        "./lib/engines/*"
+      ]
     }
   },
   "include": [
@@ -44,5 +56,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

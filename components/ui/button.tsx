@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground shadow-[0_4px_14px_rgba(30,107,140,0.25)] hover:shadow-[0_6px_20px_rgba(30,107,140,0.35)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_rgba(30,107,140,0.2)]',
+          'bg-primary text-primary-foreground shadow-[0_4px_14px_rgba(13,148,136,0.25)] hover:shadow-[0_6px_20px_rgba(13,148,136,0.35)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_rgba(13,148,136,0.2)]',
         destructive:
           'bg-destructive text-white shadow-sm hover:bg-destructive/90 focus-visible:ring-destructive/20',
         outline:
@@ -21,14 +21,14 @@ const buttonVariants = cva(
           'hover:bg-muted hover:text-foreground',
         link:
           'text-primary underline-offset-4 hover:underline',
-        ocean:
-          'bg-ocean-deep text-white shadow-[0_4px_16px_rgba(30,107,140,0.4)] hover:bg-ocean-mid hover:shadow-[0_6px_24px_rgba(30,107,140,0.5)] hover:-translate-y-0.5 active:translate-y-0',
-        pastel:
-          'bg-pastel-coral text-foreground hover:bg-pastel-peach hover:shadow-md',
-        'pastel-sage':
-          'bg-pastel-sage text-foreground hover:bg-pastel-sage/80',
-        'pastel-peach':
-          'bg-pastel-peach text-foreground hover:bg-pastel-peach/80',
+        coral:
+          'bg-accent text-accent-foreground shadow-[0_4px_12px_rgba(249,112,102,0.3)] hover:shadow-[0_6px_20px_rgba(249,112,102,0.4)] hover:-translate-y-0.5 active:translate-y-0',
+        seafoam:
+          'bg-warm-seafoam/20 text-warm-teal hover:bg-warm-seafoam/30',
+        warm:
+          'bg-warm-gold/20 text-warm-navy hover:bg-warm-gold/30',
+        cta:
+          'bg-accent text-accent-foreground shadow-[0_4px_16px_rgba(249,112,102,0.4)] hover:shadow-[0_6px_24px_rgba(249,112,102,0.5)] hover:-translate-y-0.5 active:translate-y-0',
       },
       size: {
         default: 'h-11 px-6 py-2 rounded-xl',

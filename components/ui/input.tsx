@@ -12,8 +12,8 @@ const inputVariants = cva(
           'bg-background border border-input rounded-xl shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20',
         filled:
           'bg-muted border-2 border-transparent rounded-xl focus:border-primary focus:bg-background',
-        ocean:
-          'bg-ocean-mist/50 border-2 border-transparent rounded-xl focus:border-ocean-mid focus:bg-white focus:ring-2 focus:ring-ocean-mid/20',
+        teal:
+          'bg-primary/5 border-2 border-transparent rounded-xl focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20',
         ghost:
           'bg-transparent border-b-2 border-border rounded-none focus:border-primary',
       },

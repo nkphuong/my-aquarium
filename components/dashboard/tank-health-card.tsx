@@ -91,8 +91,8 @@ export function TankHealthCard({
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-pastel-sage to-pastel-cream">
-            <Fish className="h-12 w-12 text-ocean-mid/40" />
+          <div className="flex h-full w-full items-center justify-center bg-warm-cream">
+            <Fish className="h-12 w-12 text-primary/40" />
           </div>
         )}
 
@@ -158,9 +158,9 @@ export function TankHealthCard({
           <button
             className={cn(
               "flex flex-1 items-center justify-center gap-1.5 rounded-lg",
-              "bg-pastel-sage/50 px-3 py-2 text-xs font-medium",
+              "bg-primary/10 px-3 py-2 text-xs font-medium",
               "transition-all duration-200",
-              "hover:bg-pastel-sage"
+              "hover:bg-primary/20"
             )}
           >
             <FlaskConical className="h-3.5 w-3.5" />
@@ -169,9 +169,9 @@ export function TankHealthCard({
           <button
             className={cn(
               "flex flex-1 items-center justify-center gap-1.5 rounded-lg",
-              "bg-pastel-yellow/50 px-3 py-2 text-xs font-medium",
+              "bg-warm-gold/10 px-3 py-2 text-xs font-medium",
               "transition-all duration-200",
-              "hover:bg-pastel-yellow"
+              "hover:bg-warm-gold/20"
             )}
           >
             <Utensils className="h-3.5 w-3.5" />
@@ -180,9 +180,9 @@ export function TankHealthCard({
           <button
             className={cn(
               "flex flex-1 items-center justify-center gap-1.5 rounded-lg",
-              "bg-pastel-purple/50 px-3 py-2 text-xs font-medium",
+              "bg-primary/5 px-3 py-2 text-xs font-medium",
               "transition-all duration-200",
-              "hover:bg-pastel-purple"
+              "hover:bg-primary/10"
             )}
           >
             <Droplets className="h-3.5 w-3.5" />
@@ -197,7 +197,7 @@ export function TankHealthCard({
             "mt-3 flex items-center justify-center gap-1 rounded-lg",
             "border border-border/50 px-3 py-2 text-xs font-medium text-muted-foreground",
             "transition-all duration-200",
-            "hover:border-ocean-mid hover:text-ocean-deep"
+            "hover:border-primary hover:text-primary"
           )}
         >
           View Details

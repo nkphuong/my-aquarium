@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { memo } from "react"
 import { ArrowRight, Waves } from "lucide-react"
 import { clsx } from "clsx"
 
@@ -28,7 +29,7 @@ interface TankCardProps {
     totalInhabitants: number
 }
 
-export function TankCard({
+export const TankCard = memo(function TankCard({
     id,
     name,
     imageUrl,
@@ -41,9 +42,9 @@ export function TankCard({
 }: TankCardProps) {
     const statusConfig = {
         healthy: {
-            bg: "bg-emerald-500",
+            bg: "bg-primary",
             text: "Healthy",
-            ring: "ring-emerald-500/20",
+            ring: "ring-primary/20",
         },
         warning: {
             bg: "bg-amber-500",
@@ -58,7 +59,7 @@ export function TankCard({
     }
 
     const parameterStatusColors = {
-        good: "bg-emerald-500",
+        good: "bg-primary",
         warning: "bg-amber-500",
         danger: "bg-red-500",
     }
@@ -156,7 +157,7 @@ export function TankCard({
                             />
                         ))}
                         {extraCount > 0 && (
-                            <div className="size-9 rounded-full border-2 border-card bg-pastel-sage flex items-center justify-center text-xs text-foreground font-bold shadow-sm">
+                            <div className="size-9 rounded-full border-2 border-card bg-warm-seafoam/20 flex items-center justify-center text-xs text-foreground font-bold shadow-sm">
                                 +{extraCount}
                             </div>
                         )}
@@ -174,12 +175,12 @@ export function TankCard({
             </div>
         </div>
     )
-}
+})
 
 /**
- * Tanks Section Component
- * Wrapper for tank cards with header and "View All" link
- */
+     * Tanks Section Component
+     * Wrapper for tank cards with header and "View All" link
+     */
 interface TanksSectionProps {
     children: React.ReactNode
 }

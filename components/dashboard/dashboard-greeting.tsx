@@ -32,10 +32,7 @@ export function DashboardGreeting({
   return (
     <div className={cn("py-2", className)}>
       <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-        {greeting}, {userName}!{" "}
-        <span className="inline-block animate-wave origin-bottom-right">
-          👋
-        </span>
+        {greeting}, {userName}
       </h1>
       <p className="mt-1 text-muted-foreground">
         {subtitle || getTankStatus()}

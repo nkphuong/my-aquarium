@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Send, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { FinleyMascot } from "./shared/finley-mascot"
 
 interface AICompanionWidgetProps {
   aiName?: string
@@ -40,7 +39,7 @@ export function AICompanionWidget({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-3xl bg-pastel-sage p-6",
+        "relative overflow-hidden rounded-3xl bg-warm-seafoam/20 p-6",
         "transition-all duration-300 hover:shadow-lg",
         className
       )}
@@ -53,8 +52,8 @@ export function AICompanionWidget({
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="mb-1 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-ocean-deep" />
-            <span className="text-xs font-medium uppercase tracking-wider text-ocean-deep/70">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-xs font-medium uppercase tracking-wider text-primary/70">
               Your Aquarium Guide
             </span>
           </div>
@@ -64,9 +63,9 @@ export function AICompanionWidget({
           <p className="mt-1 text-sm text-muted-foreground">
             {isThinking ? (
               <span className="flex items-center gap-1">
-                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-ocean-mid" />
-                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-ocean-mid delay-75" />
-                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-ocean-mid delay-150" />
+                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-primary delay-75" />
+                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-primary delay-150" />
                 <span className="ml-1">Thinking...</span>
               </span>
             ) : (
@@ -75,13 +74,11 @@ export function AICompanionWidget({
           </p>
         </div>
 
-        {/* Mascot */}
+        {/* AI Icon */}
         <div className="flex-shrink-0">
-          <FinleyMascot
-            size="md"
-            mood={isThinking ? "thinking" : "happy"}
-            animated
-          />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+            <Sparkles className="h-5 w-5 text-primary" />
+          </div>
         </div>
       </div>
 
@@ -108,7 +105,7 @@ export function AICompanionWidget({
             "text-sm placeholder:text-muted-foreground/60",
             "border-2 border-transparent",
             "transition-all duration-200",
-            "focus:border-ocean-mid focus:bg-white focus:outline-none",
+            "focus:border-primary focus:bg-white focus:outline-none",
             "disabled:cursor-not-allowed disabled:opacity-50"
           )}
         />
@@ -118,9 +115,9 @@ export function AICompanionWidget({
           className={cn(
             "absolute right-2 top-1/2 -translate-y-1/2",
             "flex h-8 w-8 items-center justify-center rounded-full",
-            "bg-ocean-deep text-white",
+            "bg-primary text-white",
             "transition-all duration-200",
-            "hover:bg-ocean-mid hover:scale-105",
+            "hover:bg-primary/90 hover:scale-105",
             "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
           )}
         >

@@ -2,7 +2,6 @@
 
 import { Sparkles, ArrowRight, Lightbulb, AlertTriangle, Info, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { FinleyMascot } from "./shared/finley-mascot"
 
 export interface AIInsight {
   id: string
@@ -26,27 +25,27 @@ interface AIInsightsHeroProps {
 const priorityConfig = {
   info: {
     icon: Info,
-    dotColor: "bg-ocean-mid",
-    borderColor: "border-ocean-light/30",
+    dotColor: "bg-primary",
+    borderColor: "border-warm-teal-light/30",
     bgColor: "bg-white/60",
   },
   suggestion: {
     icon: Lightbulb,
-    dotColor: "bg-pastel-yellow",
-    borderColor: "border-pastel-yellow/30",
+    dotColor: "bg-warm-gold/10",
+    borderColor: "border-warm-gold/30",
     bgColor: "bg-white/60",
   },
   warning: {
     icon: AlertTriangle,
-    dotColor: "bg-pastel-peach",
-    borderColor: "border-pastel-peach/30",
-    bgColor: "bg-pastel-peach/20",
+    dotColor: "bg-warm-coral/10",
+    borderColor: "border-warm-coral/30",
+    bgColor: "bg-warm-coral/10",
   },
   critical: {
     icon: AlertCircle,
-    dotColor: "bg-pastel-coral",
-    borderColor: "border-pastel-coral/30",
-    bgColor: "bg-pastel-coral/20",
+    dotColor: "bg-accent/10",
+    borderColor: "border-accent/30",
+    bgColor: "bg-accent/10",
   },
 }
 
@@ -61,29 +60,20 @@ export function AIInsightsHero({
     <div
       className={cn(
         "relative overflow-hidden rounded-3xl",
-        "bg-gradient-to-br from-pastel-cream via-pastel-cream to-pastel-sage/30",
+        "bg-warm-cream",
         "p-6 md:p-8",
         className
       )}
     >
-      {/* Decorative elements */}
-      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-pastel-sage/20 blur-3xl" />
-      <div className="absolute -bottom-8 left-1/4 h-32 w-32 rounded-full bg-pastel-yellow/20 blur-2xl" />
-
-      {/* Floating bubbles decoration */}
-      <div className="absolute right-20 top-12 h-3 w-3 rounded-full bg-white/40 animate-float" />
-      <div className="absolute right-32 top-20 h-2 w-2 rounded-full bg-white/30 animate-float delay-500" />
-      <div className="absolute right-16 top-24 h-1.5 w-1.5 rounded-full bg-white/20 animate-float delay-1000" />
-
       {/* Header */}
       <div className="relative mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/50 backdrop-blur-sm">
-            <Sparkles className="h-5 w-5 text-ocean-deep" />
+            <Sparkles className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-foreground">
-              What {aiName} Thinks
+              AI Insights
             </h2>
             <p className="text-sm text-muted-foreground">
               Personalized insights for your tanks
@@ -91,10 +81,6 @@ export function AIInsightsHero({
           </div>
         </div>
 
-        {/* Mascot */}
-        <div className="hidden md:block">
-          <FinleyMascot size="lg" mood="happy" animated />
-        </div>
       </div>
 
       {/* Insights Grid */}
@@ -109,7 +95,7 @@ export function AIInsightsHero({
               className={cn(
                 "group relative rounded-2xl border p-4",
                 "backdrop-blur-sm transition-all duration-300",
-                "hover:scale-[1.02] hover:shadow-md",
+                "hover:-translate-y-0.5 hover:shadow-md",
                 config.borderColor,
                 config.bgColor
               )}
@@ -143,7 +129,7 @@ export function AIInsightsHero({
               <button
                 onClick={() => onInsightAction?.(insight)}
                 className={cn(
-                  "flex items-center gap-1 text-sm font-medium text-ocean-deep",
+                  "flex items-center gap-1 text-sm font-medium text-primary",
                   "transition-all duration-200",
                   "group-hover:gap-2"
                 )}
@@ -162,9 +148,9 @@ export function AIInsightsHero({
           onClick={onAskQuestion}
           className={cn(
             "flex items-center gap-2 rounded-full",
-            "bg-ocean-deep px-6 py-3 text-sm font-medium text-white",
+            "bg-primary px-6 py-3 text-sm font-medium text-white",
             "transition-all duration-300",
-            "hover:bg-ocean-mid hover:scale-105 hover:shadow-lg"
+            "hover:bg-primary/90 hover:scale-105 hover:shadow-lg"
           )}
         >
           <Sparkles className="h-4 w-4" />

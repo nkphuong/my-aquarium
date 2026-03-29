@@ -6,33 +6,26 @@ import Link from 'next/link'
 import { Mail, Lock, User, Loader2, Fish, Sparkles, Check } from 'lucide-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input } from "@/components/ui/input"
-import * as yup from 'yup'
-import { yupResolver } from "@hookform/resolvers/yup"
+import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod"
 import { ErrorMessage } from "@hookform/error-message"
 import { signIn } from 'next-auth/react'
 
-const schema = yup
-  .object({
-    name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
-    email: yup.string().required('Email is required').email('Please enter a valid email'),
-    password: yup.string()
-      .required('Password is required')
-      .min(8, 'Password must be at least 8 characters')
-      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .matches(/[0-9]/, 'Password must contain at least one number'),
-    confirmPassword: yup.string()
-      .required('Please confirm your password')
-      .oneOf([yup.ref('password')], 'Passwords must match'),
-  })
-  .required()
+const registerSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().min(1, 'Email is required').email('Please enter a valid email'),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number'),
+  confirmPassword: z.string().min(1, 'Please confirm your password'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Passwords must match',
+  path: ['confirmPassword'],
+})
 
-interface RegisterFormData {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+type RegisterFormData = z.infer<typeof registerSchema>
 
 export function RegisterForm() {
   const router = useRouter()
@@ -45,7 +38,7 @@ export function RegisterForm() {
     formState: { errors, isSubmitting },
     watch
   } = useForm<RegisterFormData>({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(registerSchema),
   })
 
   const password = watch('password', '')
@@ -69,11 +62,19 @@ export function RegisterForm() {
         name: data.name,
         email: data.email,
         password: data.password,
+        redirect: false,
       })
-      // if (result?.ok) {
-      router.push('/dashboard')
-      // }
 
+      if (result?.error) {
+        setServerError(result.error === 'CredentialsSignin'
+          ? 'Registration failed. Email may already be in use.'
+          : result.error)
+        return
+      }
+
+      if (result?.ok) {
+        router.push('/dashboard')
+      }
     } catch (error) {
       setServerError('An unexpected error occurred. Please try again.')
     }
@@ -81,22 +82,19 @@ export function RegisterForm() {
 
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Glass Card with enhanced styling - Force light mode */}
-      <div className="relative bg-white/95 backdrop-blur-2xl rounded-3xl shadow-[0_8px_40px_rgba(30,107,140,0.25)] p-8 md:p-10 border border-white/80 overflow-hidden">
-        {/* Decorative bubbles in card */}
-        <div className="absolute -top-4 -right-4 w-24 h-24 bg-cyan-200/30 rounded-full blur-2xl" />
-        <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-sky-200/40 rounded-full blur-3xl" />
+      {/* Card */}
+      <div className="relative bg-white rounded-3xl shadow-[0_8px_40px_rgba(13,148,136,0.15)] p-8 md:p-10 border border-border/40 overflow-hidden">
 
         {/* Header with icon */}
         <div className="relative mb-6 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-ocean-mid to-ocean-deep rounded-2xl shadow-lg mb-4 animate-wiggle-slow">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl shadow-lg mb-4">
             <Fish className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-ocean-deep to-ocean-mid bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold text-primary mb-2">
             Create Account
           </h1>
           <p className="text-slate-500 text-sm flex items-center justify-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-ocean-mid" />
+            <Sparkles className="w-4 h-4 text-primary" />
             Join AquaHeart and start your journey
           </p>
         </div>
@@ -120,11 +118,11 @@ export function RegisterForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                <User className="size-5 text-ocean-mid group-focus-within:text-ocean-deep transition-colors" />
+                <User className="size-5 text-primary group-focus-within:text-primary/80 transition-colors" />
               </div>
               <Input
                 id="name"
-                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-ocean-mid focus:bg-white focus:shadow-[0_0_0_4px_rgba(74,158,191,0.15)] transition-all duration-300"
+                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(13,148,136,0.15)] transition-all duration-300"
                 placeholder="John Doe"
                 {...register("name")}
               />
@@ -151,12 +149,12 @@ export function RegisterForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                <Mail className="size-5 text-ocean-mid group-focus-within:text-ocean-deep transition-colors" />
+                <Mail className="size-5 text-primary group-focus-within:text-primary/80 transition-colors" />
               </div>
               <Input
                 id="email"
                 type="email"
-                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-ocean-mid focus:bg-white focus:shadow-[0_0_0_4px_rgba(74,158,191,0.15)] transition-all duration-300"
+                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(13,148,136,0.15)] transition-all duration-300"
                 placeholder="your@email.com"
                 {...register("email")}
               />
@@ -183,12 +181,12 @@ export function RegisterForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                <Lock className="size-5 text-ocean-mid group-focus-within:text-ocean-deep transition-colors" />
+                <Lock className="size-5 text-primary group-focus-within:text-primary/80 transition-colors" />
               </div>
               <Input
                 id="password"
                 type="password"
-                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-ocean-mid focus:bg-white focus:shadow-[0_0_0_4px_rgba(74,158,191,0.15)] transition-all duration-300"
+                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(13,148,136,0.15)] transition-all duration-300"
                 placeholder="Create a strong password"
                 {...register("password")}
               />
@@ -197,20 +195,20 @@ export function RegisterForm() {
             {/* Password Strength Indicators */}
             {password && (
               <div className="grid grid-cols-2 gap-2 mt-2 ml-1">
-                <div className={`flex items-center gap-1.5 text-xs ${hasMinLength ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-                  <Check className={`w-3.5 h-3.5 ${hasMinLength ? 'text-emerald-600' : 'text-muted-foreground/50'}`} />
+                <div className={`flex items-center gap-1.5 text-xs ${hasMinLength ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <Check className={`w-3.5 h-3.5 ${hasMinLength ? 'text-primary' : 'text-muted-foreground/50'}`} />
                   8+ characters
                 </div>
-                <div className={`flex items-center gap-1.5 text-xs ${hasLowercase ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-                  <Check className={`w-3.5 h-3.5 ${hasLowercase ? 'text-emerald-600' : 'text-muted-foreground/50'}`} />
+                <div className={`flex items-center gap-1.5 text-xs ${hasLowercase ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <Check className={`w-3.5 h-3.5 ${hasLowercase ? 'text-primary' : 'text-muted-foreground/50'}`} />
                   Lowercase letter
                 </div>
-                <div className={`flex items-center gap-1.5 text-xs ${hasUppercase ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-                  <Check className={`w-3.5 h-3.5 ${hasUppercase ? 'text-emerald-600' : 'text-muted-foreground/50'}`} />
+                <div className={`flex items-center gap-1.5 text-xs ${hasUppercase ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <Check className={`w-3.5 h-3.5 ${hasUppercase ? 'text-primary' : 'text-muted-foreground/50'}`} />
                   Uppercase letter
                 </div>
-                <div className={`flex items-center gap-1.5 text-xs ${hasNumber ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-                  <Check className={`w-3.5 h-3.5 ${hasNumber ? 'text-emerald-600' : 'text-muted-foreground/50'}`} />
+                <div className={`flex items-center gap-1.5 text-xs ${hasNumber ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <Check className={`w-3.5 h-3.5 ${hasNumber ? 'text-primary' : 'text-muted-foreground/50'}`} />
                   Number
                 </div>
               </div>
@@ -238,12 +236,12 @@ export function RegisterForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                <Lock className="size-5 text-ocean-mid group-focus-within:text-ocean-deep transition-colors" />
+                <Lock className="size-5 text-primary group-focus-within:text-primary/80 transition-colors" />
               </div>
               <Input
                 id="confirmPassword"
                 type="password"
-                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-ocean-mid focus:bg-white focus:shadow-[0_0_0_4px_rgba(74,158,191,0.15)] transition-all duration-300"
+                className="w-full h-14 pl-12 pr-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(13,148,136,0.15)] transition-all duration-300"
                 placeholder="Confirm your password"
                 {...register("confirmPassword")}
               />
@@ -266,19 +264,19 @@ export function RegisterForm() {
               type="button"
               onClick={() => setAgreedToTerms(!agreedToTerms)}
               className={`mt-0.5 size-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 shrink-0 ${agreedToTerms
-                ? 'bg-ocean-mid border-ocean-mid text-white'
-                : 'border-border hover:border-ocean-mid'
+                ? 'bg-primary border-primary text-white'
+                : 'border-border hover:border-primary'
                 }`}
             >
               {agreedToTerms && <Check className="w-3.5 h-3.5" />}
             </button>
             <label className="text-sm text-slate-500 leading-relaxed cursor-pointer" onClick={() => setAgreedToTerms(!agreedToTerms)}>
               I agree to the{' '}
-              <Link href="/terms" className="text-ocean-mid hover:text-ocean-deep font-medium transition-colors">
+              <Link href="/terms" className="text-primary hover:text-primary/80 font-medium transition-colors">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="/privacy" className="text-ocean-mid hover:text-ocean-deep font-medium transition-colors">
+              <Link href="/privacy" className="text-primary hover:text-primary/80 font-medium transition-colors">
                 Privacy Policy
               </Link>
             </label>
@@ -289,7 +287,7 @@ export function RegisterForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="relative w-full py-4 px-6 rounded-full bg-gradient-to-r from-ocean-deep to-ocean-mid hover:from-ocean-mid hover:to-ocean-deep text-white font-bold text-base shadow-[0_4px_20px_rgba(30,107,140,0.4)] hover:shadow-[0_6px_30px_rgba(30,107,140,0.5)] transform hover:-translate-y-1 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none overflow-hidden group"
+              className="relative w-full py-4 px-6 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base shadow-[0_4px_20px_rgba(13,148,136,0.3)] hover:shadow-[0_6px_30px_rgba(13,148,136,0.4)] transform hover:-translate-y-1 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none overflow-hidden group"
             >
               {/* Animated shine effect */}
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -306,41 +304,13 @@ export function RegisterForm() {
           </div>
         </form>
 
-        {/* Wave Divider */}
-        <div className="relative mt-6 mb-4">
-          <svg
-            viewBox="0 0 400 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-6 text-ocean-mid/40"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0 12 Q 50 4 100 12 T 200 12 T 300 12 T 400 12"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              className="animate-wave-line"
-            />
-            <path
-              d="M0 18 Q 50 10 100 18 T 200 18 T 300 18 T 400 18"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="none"
-              opacity="0.5"
-              className="animate-wave-line"
-              style={{ animationDelay: '-1s' }}
-            />
-          </svg>
-        </div>
-
         {/* Sign In Link */}
-        <div className="text-center">
+        <div className="text-center mt-6">
           <span className="text-slate-500 text-sm">
             Already have an account?
           </span>
           <Link
-            className="text-ocean-mid hover:text-ocean-deep font-bold text-sm ml-2 transition-colors inline-flex items-center gap-1"
+            className="text-primary hover:text-primary/80 font-bold text-sm ml-2 transition-colors inline-flex items-center gap-1"
             href="/login"
           >
             Sign in

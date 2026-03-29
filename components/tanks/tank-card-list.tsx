@@ -1,30 +1,21 @@
-'use client';
-import { useEffect } from "react";
-import { useTankStore } from "@/app/stores/app/tank.store";
-import TankCard from "./tank-card";
-import CreateTankCardPlaceholder from "./create-tank-card-placeholder";
+'use client'
 
-export default function TankCardList({ jwtToken, onCreateTank, keyword, type, style }: {
-    jwtToken: string,
-    onCreateTank: () => void,
-    keyword?: string,
-    type?: string,
-    style?: string
-}) {
-    // const {data: session} = useSession();
-    const tanks = useTankStore((state) => state.tanks)
+import type { Tank } from '@/lib/types'
+import TankCard from './tank-card'
+import CreateTankCardPlaceholder from './create-tank-card-placeholder'
 
-    const loading = useTankStore((state) => state.isLoading)
-    const error = useTankStore((state) => state.error)
-    const fetchTanks = useTankStore((state) => state.fetchTanks)
+interface TankCardListProps {
+    tanks: Tank[]
+    onCreateTank: () => void
+}
 
-    useEffect(() => {
-        fetchTanks(jwtToken, keyword, type, style)
-    }, [jwtToken, fetchTanks])
-
-    if (loading && !tanks) return <div>Loading...</div>
-    if (error) return <div>Error: {error}</div>
-
+/**
+ * TankCardList Component
+ *
+ * Displays a grid of tank cards.
+ * Receives tanks as props from Server Component (no client-side fetching).
+ */
+export default function TankCardList({ tanks, onCreateTank }: TankCardListProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tanks.map((tank) => (
@@ -32,5 +23,5 @@ export default function TankCardList({ jwtToken, onCreateTank, keyword, type, st
             ))}
             <CreateTankCardPlaceholder onCreateTank={onCreateTank} />
         </div>
-    );
+    )
 }

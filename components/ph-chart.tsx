@@ -37,7 +37,7 @@ export function PHChart() {
                 }}
                 labelStyle={{ color: "oklch(0.95 0 0)" }}
               />
-              <Legend wrapperStyle={{ paddingTop: "1rem" }} textColor="oklch(0.95 0 0)" />
+              <Legend wrapperStyle={{ paddingTop: "1rem", color: "oklch(0.95 0 0)" }} />
               <Line
                 type="monotone"
                 dataKey="ph"

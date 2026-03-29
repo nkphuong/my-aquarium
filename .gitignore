@@ -41,5 +41,9 @@ yarn-error.log*
 next-env.d.ts
 # design/*
 .playwright-mcp/*
-./agent
-./claude
+.agent/*
+.claude/*
+.opencode/*
+.cursor/*
+# .agent/skills/vercel-react-best-practices/*
+# .claude/skills/vercel-react-best-practices/*

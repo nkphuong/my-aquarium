@@ -34,10 +34,10 @@ const iconMap = {
 }
 
 const accentColors = {
-  tanks: "bg-pastel-sage",
-  inhabitants: "bg-pastel-purple",
-  alerts: "bg-pastel-peach",
-  streak: "bg-pastel-yellow",
+  tanks: "bg-warm-seafoam/20",
+  inhabitants: "bg-primary/5",
+  alerts: "bg-warm-coral/10",
+  streak: "bg-warm-gold/10",
 }
 
 const trendConfig = {

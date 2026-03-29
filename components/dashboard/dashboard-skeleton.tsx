@@ -16,7 +16,7 @@ export function DashboardSkeleton() {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="h-32 bg-pastel-sage/50 rounded-2xl"
+            className="h-32 bg-primary/10 rounded-2xl"
           />
         ))}
       </div>

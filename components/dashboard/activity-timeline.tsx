@@ -29,27 +29,27 @@ interface ActivityTimelineProps {
 const activityConfig = {
   testing: {
     icon: FlaskConical,
-    bgColor: "bg-pastel-sage",
+    bgColor: "bg-warm-seafoam/20",
     iconColor: "text-foreground/70",
   },
   feeding: {
     icon: Utensils,
-    bgColor: "bg-pastel-yellow",
+    bgColor: "bg-warm-gold/10",
     iconColor: "text-foreground/70",
   },
   maintenance: {
     icon: Wrench,
-    bgColor: "bg-pastel-purple",
+    bgColor: "bg-primary/5",
     iconColor: "text-foreground/70",
   },
   water_change: {
     icon: Droplets,
-    bgColor: "bg-pastel-cream",
+    bgColor: "bg-warm-cream",
     iconColor: "text-foreground/70",
   },
   alert: {
     icon: AlertCircle,
-    bgColor: "bg-pastel-peach",
+    bgColor: "bg-warm-coral/10",
     iconColor: "text-foreground/70",
   },
 }
@@ -79,7 +79,7 @@ export function ActivityTimeline({
           className={cn(
             "flex items-center gap-1 text-xs font-medium text-muted-foreground",
             "transition-colors duration-200",
-            "hover:text-ocean-deep"
+            "hover:text-primary"
           )}
         >
           View all

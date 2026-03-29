@@ -14,7 +14,6 @@ export { LearningCenterPreview } from "./learning-center-preview"
 export type { LearningTip } from "./learning-center-preview"
 
 // Shared Components
-export { FinleyMascot } from "./shared/finley-mascot"
 export { HealthScoreRing } from "./shared/health-score-ring"
 
 // Legacy Components (kept for backward compatibility)

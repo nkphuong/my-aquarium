@@ -31,27 +31,27 @@ interface PriorityTasksGridProps {
 const taskTypeConfig = {
   water_change: {
     icon: Droplets,
-    bgColor: "bg-pastel-sage",
+    bgColor: "bg-warm-seafoam/20",
     iconBg: "bg-white/40",
   },
   filter_clean: {
     icon: Wrench,
-    bgColor: "bg-pastel-purple",
+    bgColor: "bg-primary/5",
     iconBg: "bg-white/40",
   },
   feeding: {
     icon: Utensils,
-    bgColor: "bg-pastel-yellow",
+    bgColor: "bg-warm-gold/10",
     iconBg: "bg-white/40",
   },
   testing: {
     icon: FlaskConical,
-    bgColor: "bg-pastel-peach",
+    bgColor: "bg-warm-coral/10",
     iconBg: "bg-white/40",
   },
   maintenance: {
     icon: Settings,
-    bgColor: "bg-pastel-cream",
+    bgColor: "bg-warm-cream",
     iconBg: "bg-white/40",
   },
 }
@@ -98,8 +98,8 @@ export function PriorityTasksGrid({
           className
         )}
       >
-        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-pastel-sage/50">
-          <Check className="h-6 w-6 text-ocean-deep" />
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+          <Check className="h-6 w-6 text-primary" />
         </div>
         <p className="font-medium text-foreground">All caught up!</p>
         <p className="text-sm text-muted-foreground">
@@ -129,7 +129,7 @@ export function PriorityTasksGrid({
             className={cn(
               "group relative cursor-pointer overflow-hidden rounded-2xl p-5",
               "transition-all duration-300",
-              "hover:scale-[1.02] hover:shadow-lg",
+              "hover:-translate-y-0.5 hover:shadow-lg",
               typeConfig.bgColor
             )}
           >

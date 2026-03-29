@@ -34,10 +34,10 @@ const sizeConfig = {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return "#C5D5CB" // pastel-sage - healthy
-  if (score >= 60) return "#F5E5A8" // pastel-yellow - good
-  if (score >= 40) return "#F5D5C8" // pastel-peach - warning
-  return "#E8B4A0" // pastel-coral - danger
+  if (score >= 80) return "#0D9488" // teal - healthy
+  if (score >= 60) return "#FCD34D" // gold - good
+  if (score >= 40) return "#F97066" // coral - warning
+  return "#EF4444" // red - danger
 }
 
 function getScoreLabel(score: number): string {

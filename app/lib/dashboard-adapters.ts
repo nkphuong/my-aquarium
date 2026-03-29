@@ -5,7 +5,7 @@
  * Handles the gap between backend data and UI component requirements.
  */
 
-import type { Tank } from '@/app/types'
+import type { Tank } from '@/lib/types'
 
 /**
  * Maps tank status string to TankCard status type
@@ -17,16 +17,16 @@ function mapTankStatus(status?: string): "healthy" | "warning" | "danger" {
 
   // Danger states
   if (lower.includes("danger") ||
-      lower.includes("critical") ||
-      lower.includes("alert") ||
-      lower.includes("emergency")) {
+    lower.includes("critical") ||
+    lower.includes("alert") ||
+    lower.includes("emergency")) {
     return "danger"
   }
 
   // Warning states
   if (lower.includes("warning") ||
-      lower.includes("check") ||
-      lower.includes("attention")) {
+    lower.includes("check") ||
+    lower.includes("attention")) {
     return "warning"
   }
 
@@ -91,9 +91,9 @@ export function calculateDashboardStats(tanks: Tank[]): DashboardStats {
 
   // Calculate new tanks (setup within last 30 days)
   const newTanks = tanks.filter(tank => {
-    if (!tank.setup_at) return false
+    if (!tank.setupAt) return false
 
-    const setupDate = new Date(tank.setup_at)
+    const setupDate = new Date(tank.setupAt)
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 

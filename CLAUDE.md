@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 16 application using the App Router with TypeScript, React 19, and Tailwind CSS v4. The project follows **Clean Architecture** principles with clear separation of concerns.
+This is a Next.js 16 application using the App Router with TypeScript, React 19, and Tailwind CSS v4. The project follows **IDesign architecture** (Juval Lowy's "Righting Software") with volatility-based decomposition.
 
 ## Development Commands
 
@@ -15,370 +15,263 @@ This is a Next.js 16 application using the App Router with TypeScript, React 19,
 
 This project uses **pnpm** as the package manager.
 
-## Architecture
+## Architecture (IDesign-Inspired)
 
-### Clean Architecture Structure
+The codebase follows **IDesign's 4-layer architecture** based on volatility-based decomposition:
 
-The codebase follows **true framework independence**:
-- **`src/`** - Pure TypeScript business logic (portable to ANY framework: React, Vue, Svelte, Angular)
-- **`app/`** - Next.js App Router (React/Next.js specific framework layer)
-- **`components/`** - React components (React-specific, follows shadcn/ui convention)
-
-Business logic is organized into three layers inside `src/` (pure TypeScript only):
-
-#### 1. Domain Layer (`src/domain/`)
-The core business logic, completely independent of frameworks and external concerns.
-- **entities/** - Core business objects with identity
-- **repositories/** - Repository interfaces (not implementations)
-- **services/** - Domain services for business logic that doesn't fit in entities
-
-**Rules:**
-- No dependencies on other layers
-- Pure TypeScript - no framework dependencies
-- Contains only business rules and domain logic
-
-#### 2. Application Layer (`src/application/`)
-Orchestrates the flow of data and implements application services.
-- **services/** - Application services with business logic (one service can handle multiple related operations)
-- **dtos/** - Data Transfer Objects (Laravel-style organization)
-  - **dtos/requests/** - Request DTOs for input (similar to Laravel FormRequests)
-  - **dtos/responses/** - Response DTOs for output (similar to Laravel API Resources)
-
-**Rules:**
-- Depends only on domain layer
-- No UI or database implementation details
-- Defines interfaces for external services when needed
-- Services are classes that can contain multiple related methods
-
-**DTO Organization (Laravel-style):**
 ```
-src/application/dtos/
-├── requests/           # Input DTOs
-│   ├── auth/
-│   │   └── login.request.ts
-│   └── index.ts
-├── responses/          # Output DTOs
-│   ├── auth/
-│   │   └── login.response.ts
-│   └── index.ts
-└── index.ts           # Re-exports all DTOs
+┌─────────────────────────────────────────────────────────┐
+│ Managers (app/actions/)                                  │
+│ Orchestration, workflow, Server Actions                  │
+│ High volatility - changes with requirements              │
+├─────────────────────────────────────────────────────────┤
+│ Engines (lib/engines/)                                   │
+│ Business logic, validation, rules, calculations          │
+│ Medium volatility - changes with business rules          │
+├─────────────────────────────────────────────────────────┤
+│ Accessors (lib/accessors/)                               │
+│ Data access, API calls, transformations                  │
+│ Low volatility - stable data operations                  │
+├─────────────────────────────────────────────────────────┤
+│ Resources (lib/api/, lib/auth/, lib/errors/)             │
+│ HTTP client, auth helpers, utilities                     │
+│ Very low volatility - infrastructure concerns            │
+└─────────────────────────────────────────────────────────┘
 ```
 
-- **Requests**: Input data structures (like Laravel FormRequests)
-- **Responses**: Output data structures (like Laravel API Resources)
-- **Entities**: Business objects remain in `@/domain/entities/`
-- Import from: `@/application/dtos/requests/...` or `@/application/dtos/responses/...`
+### Directory Structure
 
-#### 3. Infrastructure Layer (`src/infrastructure/`)
-Implements interfaces defined in domain and application layers.
-- **persistence/** - Database implementations, repository implementations
-- **external-services/** - Third-party API clients, integrations
-- **di/** - Dependency Injection container configuration (TSyringe)
-- **auth/** - Authentication configuration (NextAuth.js)
-
-**Rules:**
-- Implements repository interfaces from domain layer
-- Contains framework-specific and third-party integrations
-- Depends on domain and application layers
-- Configures dependency injection and authentication
-- **Pure TypeScript only** - no React/UI code
-
-### React/Next.js Framework Layer
-
-All React and Next.js specific code lives OUTSIDE of `src/`:
-
-#### Components (`/components/`)
-React components following shadcn/ui convention (at project root).
-- **components/ui/** - shadcn/ui components
-- **components/features/** - Feature-specific components
-
-**Rules:**
-- React-specific code
-- Can use services from `src/application/`
-- Follows shadcn/ui convention (components at root)
-
-#### Next.js App Router (`/app/`)
-Next.js pages, layouts, and framework-specific code.
-- **app/(routes)/** - Pages and layouts (Next.js App Router)
-- **app/actions/** - Server Actions
-- **app/stores/** - Zustand stores for state management
-  - **stores/app/** - Application state (auth, user session)
-  - **stores/ui/** - UI state (modals, theme, loading)
-
-**Rules:**
-- Next.js and React specific
-- Can use services from `src/application/`
-- All React state management (Zustand) lives here
-
-### State Management with Zustand
-
-**Where**: `app/stores/` (Next.js/React framework layer)
-
-Zustand stores are React hooks, so they live in the `app/` layer (NOT in `src/`).
-
-**Organization:**
 ```
-app/
-├── types/             # Client-side type definitions (plain objects)
-│   ├── auth.types.ts  # Auth DTOs for client
-│   └── tank.types.ts  # Tank DTOs for client
+my-aquarium/
+├── lib/                    # Business logic layer (IDesign layers)
+│   ├── engines/            # Business rules & validation
+│   │   ├── tank.engine.ts
+│   │   ├── auth.engine.ts
+│   │   ├── dashboard.engine.ts
+│   │   └── index.ts
+│   ├── accessors/          # Data access layer
+│   │   ├── base.accessor.ts
+│   │   ├── tank.accessor.ts
+│   │   ├── user.accessor.ts
+│   │   └── index.ts
+│   ├── api/                # HTTP client (Resource)
+│   │   └── client.ts
+│   ├── auth/               # Authentication (Resource)
+│   │   ├── nextauth.ts
+│   │   ├── config.ts
+│   │   └── token.ts
+│   ├── types/              # Type definitions
+│   │   ├── tank.ts
+│   │   ├── auth.ts
+│   │   ├── user.ts
+│   │   └── api.ts
+│   └── errors/             # Error handling (Utility)
+│       └── auth.error.ts
 │
-├── actions/           # Server Actions (serialization boundary)
-│   ├── auth.actions.ts # Calls services, serializes responses
-│   └── tank.actions.ts # Calls services, serializes responses
+├── app/                    # Next.js framework layer
+│   ├── (authenticated)/    # Protected routes
+│   │   ├── dashboard/
+│   │   ├── tanks/
+│   │   └── layout.tsx
+│   ├── actions/            # Server Actions (Managers)
+│   │   ├── tank.actions.ts
+│   │   └── index.ts
+│   ├── stores/             # Zustand (UI state only)
+│   │   └── ui/
+│   ├── login/
+│   └── register/
 │
-└── stores/            # Zustand stores
-    ├── app/           # Application state
-    │   ├── auth.store.ts  # Uses actions & types
-    │   └── tank.store.ts  # Uses actions & types
-    └── ui/            # Pure UI state
-        └── modal.store.ts
+├── components/             # React components
+│   ├── ui/                 # shadcn/ui components
+│   ├── features/           # Business features
+│   ├── dashboard/          # Dashboard components
+│   └── tanks/              # Tank components
+│
+└── hooks/                  # Custom React hooks
 ```
 
-**Key Pattern - Server Actions as Serialization Bridge:**
+### IDesign Principles Applied
+
+#### 1. Managers (Server Actions)
+Location: `app/actions/`
+
+Orchestrate operations by calling Engines and Accessors:
 ```typescript
-// ✅ CORRECT: Store → Server Action → Service
-// app/stores/app/auth.store.ts
-import { create } from 'zustand'
-import { loginAction } from '@/app/actions'  // ✅ Call action, not service!
-import type { ClientUser, LoginRequestDTO } from '@/app/types'
+// app/actions/tank.actions.ts
+export async function createTank(input: CreateTankInput) {
+  // 1. Validate with Engine (business rules)
+  const validation = tankEngine.validateCreateInput(input)
+  if (!validation.valid) {
+    return { success: false, error: validation.errors?.join(', ') }
+  }
 
-interface AuthStoreState {
-  data: { user: ClientUser | null }  // Separate data from UI
-  ui: { isLoading: boolean; error: string | null }
-  login: (request: LoginRequestDTO) => Promise<void>
+  // 2. Create with Accessor (data access)
+  const tank = await tankAccessor.create(input)
+
+  // 3. Enrich with Engine (calculated properties)
+  const enriched = tankEngine.enrichTankWithStats(tank)
+
+  return { success: true, tank: enriched }
 }
-
-export const useAuthStore = create<AuthStoreState>((set) => ({
-  data: { user: null },
-  ui: { isLoading: false, error: null },
-
-  login: async (request) => {
-    set({ ui: { isLoading: true, error: null } })
-    const result = await loginAction(request)  // ✅ Server Action handles serialization
-    if (result.success) {
-      set({ data: { user: result.user }, ui: { isLoading: false, error: null } })
-    }
-  }
-}))
 ```
 
+#### 2. Engines (Business Logic)
+Location: `lib/engines/`
+
+Handle validation, calculations, and business rules:
 ```typescript
-// ❌ WRONG: Importing from src/ or calling services directly
-import { getService } from '@/infrastructure/di'  // ❌ Don't import from src/!
-import type { LoginRequest } from '@/application/dtos'  // ❌ Don't use server DTOs!
-
-export const useAuthStore = create((set) => ({
-  login: async (request) => {
-    const authService = getService('AuthService')  // ❌ No direct service calls!
-    const result = await authService.login(request)
-  }
-}))
+// lib/engines/tank.engine.ts
+class TankEngineClass {
+  validateCreateInput(input: CreateTankInput): ValidationResult { ... }
+  calculateWaterVolume(width, height, length): number { ... }
+  enrichTankWithStats(tank: Tank): EnrichedTank { ... }
+}
+export const tankEngine = new TankEngineClass()
 ```
 
-**Benefits:**
-- ✅ Complete separation: `app/` never imports from `src/`
-- ✅ Server Actions handle serialization (classes → plain objects)
-- ✅ Type-safe across client/server boundary
-- ✅ Domain entities can be classes with methods
+#### 3. Accessors (Data Access)
+Location: `lib/accessors/`
 
-**Import from:**
+Handle API calls and data transformation:
 ```typescript
-import { useAuthStore } from '@/stores/app/auth.store'
-import { loginAction } from '@/app/actions'
-import type { ClientUser } from '@/app/types'
+// lib/accessors/tank.accessor.ts
+class TankAccessorClass extends BaseAccessor {
+  async findMyTanks(filters?: TankFilters): Promise<Tank[]> {
+    const client = await this.getClient()
+    const response = await client.get('/tank/my-tanks').send()
+    return this.toDomainArray(response.data)
+  }
+}
+export const tankAccessor = new TankAccessorClass()
 ```
 
-### Why This Architecture?
+#### 4. Resources (Infrastructure)
+Location: `lib/api/`, `lib/auth/`, `lib/errors/`
 
-**True Framework Independence:**
-- `src/` contains ONLY pure TypeScript (NO React, NO Next.js, NO frameworks)
-- You can port `src/` to ANY framework: Vue, Svelte, Angular, etc.
-- React/Next.js code lives in `app/` and `components/`
-- Business logic is 100% portable and reusable
+HTTP client, authentication, utilities.
 
-### Dependency Flow
+### Key Patterns
 
+#### Data Flow (IDesign compliant)
 ```
-┌──────────────────────────────────────────────────────────┐
-│ Client Layer (app/)                                       │
-│                                                           │
-│  Components → Stores → Server Actions (Serialization)    │
-│                              ↓                            │
-└──────────────────────────────┼────────────────────────────┘
-                               │
-┌──────────────────────────────▼────────────────────────────┐
-│ Server Layer (src/)                                       │
-│                                                           │
-│  Services → Repositories → Domain Entities                │
-│                                                           │
-└───────────────────────────────────────────────────────────┘
+Component → Server Action → Engine → Accessor → HTTP Client → Backend
+                              ↓
+                    Validation + Enrichment
 ```
 
-**Data Flow with Server Actions:**
-```
-1. Component calls store action
-   ↓
-2. Store calls Server Action (app/actions/)
-   ↓
-3. Server Action calls Service (src/application/)
-   ↓
-4. Service calls Repository (src/infrastructure/)
-   ↓
-5. Repository returns Domain Entity
-   ↓
-6. Service processes and returns to Action
-   ↓
-7. Action serializes (class → plain object) and returns DTO
-   ↓
-8. Store updates state with plain object DTO
-   ↓
-9. Component re-renders with new state
-```
+#### Server Actions as Serialization Boundary
+- Server Actions return plain objects (DTOs)
+- Components never import directly from `lib/`
+- Type-safe across client/server boundary
 
-**Key Points:**
-- ✅ **Server Actions** are the serialization boundary (classes → plain objects)
-- ✅ `app/` never imports from `src/` (complete separation)
-- ✅ `src/` is pure TypeScript (portable to any framework)
-- ✅ Type-safe across client/server boundary
+#### Singleton Accessors
+```typescript
+// Accessors are exported as singletons
+export const tankAccessor = new TankAccessorClass()
+export const userAccessor = new UserAccessorClass()
+```
 
 ### TypeScript Path Aliases
-All imports should use TypeScript path aliases defined in [tsconfig.json](tsconfig.json):
 
-**Business Logic Layer (src/):**
-- `@/domain/*` - Domain layer (pure TypeScript)
-- `@/application/*` - Application layer (pure TypeScript)
-- `@/infrastructure/*` - Infrastructure layer (pure TypeScript)
-
-**Framework Layer (app/, components/):**
-- `@/app/*` - Next.js App Router
-- `@/stores/*` - Zustand stores (React state)
-- `@/components/*` - React components (shadcn/ui)
-- `@/lib/*` - Utility functions
-
-Examples:
 ```typescript
-// Business logic (src/)
-import { User } from '@/domain/entities/user'
-import { AuthService } from '@/application/services/auth.service'
-import { LoginRequest } from '@/application/dtos'
+// Business Logic (lib/)
+import { tankEngine } from '@/lib/engines'
+import { tankAccessor } from '@/lib/accessors'
+import type { Tank } from '@/lib/types'
 
-// Framework layer (app/, components/)
-import { useAuthStore } from '@/stores'
+// Framework Layer (app/, components/)
+import { getTanks } from '@/actions/tank.actions'
+import { useModalStore } from '@/stores'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 ```
 
-### Next.js App Router
-- Uses Next.js 16 with App Router (not Pages Router)
-- Entry point: [app/page.tsx](app/page.tsx)
-- Root layout: [app/layout.tsx](app/layout.tsx)
-- All routes in `app/` directory (at project root)
+Configured in `tsconfig.json`:
+- `@/lib/*` → `./lib/*`
+- `@/engines/*` → `./lib/engines/*`
+- `@/actions/*` → `./app/actions/*`
+- `@/stores/*` → `./app/stores/*`
+- `@/components/*` → `./components/*`
+- `@/hooks/*` → `./hooks/*`
 
-### Styling
-- Tailwind CSS v4 with PostCSS plugin (`@tailwindcss/postcss`)
-- Global styles: [app/globals.css](app/globals.css)
-- Uses CSS variables for theming
-- Dark mode supported via class-based strategy
+### State Management
 
-### Dashboard Styling
-- **Theme**: Light mode only (bright, playful, pastel) - `className="light"` on `<html>`
-- **Pastel Colors**: `pastel-sage`, `pastel-peach`, `pastel-cream`, `pastel-yellow`, `pastel-purple`, `pastel-coral`
-- **Stats Cards**: Use pastel backgrounds with white decorative blobs
-- **Reference**: See `docs/DASHBOARD_STYLING.md` for comprehensive guide
+**Zustand stores** are for UI state only:
+- Location: `app/stores/ui/`
+- No business logic in stores
+- Data fetching happens in Server Components
 
-### shadcn/ui Integration
-- Configuration: [components.json](components.json)
-- Style: "new-york"
-- Components go in `@/presentation/components/ui/`
-- Icon library: lucide-react
-- RSC mode enabled (React Server Components)
+**Server Components First**:
+- Fetch data in Server Components
+- Pass data as props to Client Components
+- Use Server Actions for mutations
 
-### Utility Functions
-- `cn()` function in [src/lib/utils.ts](src/lib/utils.ts) - Merges Tailwind classes using clsx and tailwind-merge
-- Always use `cn()` for conditional className logic
+### Authentication
 
-## Dependency Injection (NestJS/Laravel Style!)
+Uses NextAuth.js v5:
+- Configuration: `lib/auth/nextauth.ts`
+- Token management: `lib/auth/token.ts`
+- Protected routes: `app/(authenticated)/layout.tsx`
 
-This project uses **auto-resolving DI** - clean, simple, and type-safe!
-
-### Quick Usage
-
-```typescript
-import { getService } from '@/infrastructure/di'
-
-// ✨ One line - auto-resolves with type safety!
-const authService = getService('AuthService')
-await authService.login({ email, password })
-```
-
-### Complete Example
-
-```typescript
-'use server'
-
-import { getService } from '@/infrastructure/di'
-
-export async function loginUser(formData: FormData) {
-  const authService = getService('AuthService')
-  return await authService.login({
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  })
-}
-```
-
-### Key Benefits
-
-- ✅ **One-line resolution**: `getService('AuthService')`
-- ✅ **Type-safe**: TypeScript autocomplete & error checking
-- ✅ **Auto-resolves dependencies**: No manual wiring needed
-- ✅ **Similar to NestJS/Laravel**: Familiar developer experience
-
-### Adding New Services
-
-1. Create service in `src/application/services/`
-2. Add to `DI_TOKENS` and `ServiceMap` in `container.ts`
-3. Register in `configureDependencies()`
-4. Use with `getService('YourService')`
-
-See [src/infrastructure/di/README.md](src/infrastructure/di/README.md) for detailed documentation.
-
-## Key Dependencies
+### Key Dependencies
 
 - Next.js 16.0.6 with React 19.2.0
 - Tailwind CSS v4 with `@tailwindcss/postcss`
 - shadcn/ui utilities: `class-variance-authority`, `clsx`, `tailwind-merge`
 - Icons: `lucide-react`
-- Dependency Injection: `tsyringe`, `reflect-metadata`
 - Authentication: `next-auth@beta` (v5)
 
-## File Organization
+### Styling
 
-### Authentication
-- **`src/infrastructure/auth/`** - NextAuth.js configuration
-  - `config.ts` - Auth configuration (routes, callbacks)
-  - `index.ts` - Main auth setup with providers
-  - Import from: `@/infrastructure/auth`
+- Tailwind CSS v4 with PostCSS plugin
+- Global styles: `app/globals.css`
+- Uses CSS variables for theming
+- Light theme with pastel colors for dashboard
 
-### Documentation
-- **`docs/`** - All project documentation
-  - `ARCHITECTURE.md` - Clean architecture guide
-  - `NESTJS_INTEGRATION.md` - Backend integration guide
-  - `SETUP_COMPLETE.md` - Setup checklist
-- **`CLAUDE.md`** (root) - Quick reference for development
-- **`README.md`** (root) - Project overview
-- **`aquacompanion-srs-v2.docx.md`** - SRS document
+### shadcn/ui Integration
 
+- Configuration: `components.json`
+- Style: "new-york"
+- Components: `components/ui/`
+- RSC mode enabled
 
+### Utility Functions
+
+- `cn()` function in `lib/utils.ts` - Merges Tailwind classes
+- Always use `cn()` for conditional className logic
 
 ### Route Groups
-- **`app/(authenticated)/`** - Protected routes requiring login
-  - `dashboard/` - Dashboard page
-  - `diagnosis/` - Fish diagnosis feature
-  - `layout.tsx` - Shared layout with sidebar
-- **`app/login/`** - Public login page (no sidebar)
 
-## ESLint Configuration
+- `app/(authenticated)/` - Protected routes (dashboard, tanks, diagnosis)
+- `app/login/` - Public login page
+- `app/register/` - Public registration page
 
-Uses flat config format in [eslint.config.mjs](eslint.config.mjs) with Next.js core-web-vitals and TypeScript presets.
+## Adding New Features
+
+### 1. Add a New Engine
+```bash
+# Create engine file
+lib/engines/my-feature.engine.ts
+
+# Export from index
+lib/engines/index.ts
+```
+
+### 2. Add a New Accessor
+```bash
+# Create accessor extending BaseAccessor
+lib/accessors/my-feature.accessor.ts
+
+# Export from index
+lib/accessors/index.ts
+```
+
+### 3. Add a New Server Action
+```bash
+# Create action file using Engine + Accessor
+app/actions/my-feature.actions.ts
+```
+
+### Architecture References
+
+- [Righting Software](https://rightingsoftware.org/) by Juval Lowy
+- [IDesign Official](https://www.idesign.net/Books/Righting-Software)

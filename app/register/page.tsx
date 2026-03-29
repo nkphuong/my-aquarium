@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { auth } from '@/infrastructure/auth'
+import { auth } from '@/lib/auth'
 import { RegisterForm } from '@/components/features/register-form'
 import { AuthLayout } from '@/components/layouts/auth-layout'
 

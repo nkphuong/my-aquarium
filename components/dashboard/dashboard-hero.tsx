@@ -25,21 +25,16 @@ export function DashboardHero({ userName = "Aquarist", pendingTasks = 0 }: Dashb
             {/* Decorative Background Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Organic blob shapes */}
-                <div className="absolute -top-20 -right-20 w-64 h-64 bg-pastel-peach/30 rounded-full blur-3xl" />
-                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-pastel-sage/40 rounded-full blur-2xl" />
-                <div className="absolute top-10 left-1/3 w-32 h-32 bg-pastel-yellow/20 rounded-full blur-xl" />
-
-                {/* Squiggly line decoration */}
-                <svg className="absolute top-4 right-1/4 w-24 h-24 text-pastel-sage/40" viewBox="0 0 100 100" fill="none">
-                    <path d="M10 50 Q 30 20 50 50 T 90 50" stroke="currentColor" strokeWidth="2" fill="none" />
-                </svg>
+                <div className="absolute -top-20 -right-20 w-64 h-64 bg-warm-coral/10 rounded-full blur-3xl" />
+                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-primary/10 rounded-full blur-2xl" />
+                <div className="absolute top-10 left-1/3 w-32 h-32 bg-warm-gold/10 rounded-full blur-xl" />
             </div>
 
             {/* Content */}
             <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                        {greeting}, {userName}! <span className="inline-block animate-wave origin-bottom-right">👋</span>
+                        {greeting}, {userName}
                     </h1>
                     <p className="text-muted-foreground text-lg">
                         {pendingTasks > 0

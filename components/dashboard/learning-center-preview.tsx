@@ -57,7 +57,7 @@ export function LearningCenterPreview({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl bg-pastel-yellow p-5",
+        "relative overflow-hidden rounded-2xl bg-warm-gold/10 p-5",
         "transition-all duration-300 hover:shadow-md",
         className
       )}

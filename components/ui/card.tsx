@@ -12,21 +12,17 @@ const cardVariants = cva(
         elevated: 'bg-card text-card-foreground shadow-md hover:shadow-lg',
         outline: 'bg-transparent border-2 border-border',
         ghost: 'bg-transparent',
-        // Pastel variants
-        sage: 'bg-pastel-sage text-foreground',
-        peach: 'bg-pastel-peach text-foreground',
-        cream: 'bg-pastel-cream text-foreground',
-        yellow: 'bg-pastel-yellow text-foreground',
-        purple: 'bg-pastel-purple text-foreground',
-        coral: 'bg-pastel-coral text-foreground',
-        // Ocean variants
-        ocean: 'bg-gradient-to-br from-ocean-sky to-ocean-light text-foreground',
-        'ocean-dark': 'bg-ocean-deep text-white',
+        // Warm Aquatic variants
+        teal: 'bg-primary/5 text-foreground border border-primary/20',
+        coral: 'bg-accent/5 text-foreground border border-accent/20',
+        warm: 'bg-warm-cream text-foreground',
+        gold: 'bg-warm-gold/10 text-foreground',
+        seafoam: 'bg-warm-seafoam/10 text-foreground',
       },
       hover: {
         none: '',
-        lift: 'hover:scale-[1.02] hover:shadow-lg cursor-pointer',
-        glow: 'hover:shadow-[0_0_20px_rgba(30,107,140,0.2)] cursor-pointer',
+        lift: 'hover:-translate-y-0.5 hover:shadow-lg cursor-pointer',
+        glow: 'hover:shadow-[0_0_20px_rgba(13,148,136,0.2)] cursor-pointer',
         border: 'hover:border-primary/50 cursor-pointer',
       },
       padding: {

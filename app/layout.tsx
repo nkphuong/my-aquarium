@@ -1,15 +1,15 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Plus_Jakarta_Sans, Inter } from "next/font/google"
+import { Poppins, Inter } from "next/font/google"
 import { AuthSessionProvider } from "@/components/providers/session-provider"
 import { Toaster } from "sonner"
 import { clsx } from "clsx"
 import "./globals.css"
 
-const plusJakarta = Plus_Jakarta_Sans({
+const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-heading",
-  weight: ["500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 })
 
 const inter = Inter({
@@ -46,7 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <body className={clsx(plusJakarta.variable, inter.variable, "font-sans antialiased")}>
+      <body className={clsx(poppins.variable, inter.variable, "font-sans antialiased")}>
         <AuthSessionProvider>{children}</AuthSessionProvider>
         <Toaster richColors position="top-right" />
       </body>

@@ -19,12 +19,12 @@ interface StatCardProps {
 }
 
 const pastelColorMap = {
-    sage: "bg-pastel-sage",
-    peach: "bg-pastel-peach",
-    cream: "bg-pastel-cream",
-    yellow: "bg-pastel-yellow",
-    purple: "bg-pastel-purple",
-    coral: "bg-pastel-coral",
+    sage: "bg-warm-seafoam/20",
+    peach: "bg-warm-coral/10",
+    cream: "bg-warm-cream",
+    yellow: "bg-warm-gold/10",
+    purple: "bg-primary/5",
+    coral: "bg-accent/10",
 }
 
 function StatCard({ icon, label, value, badge, subtitle, pastelColor, isAlert }: StatCardProps) {
@@ -32,7 +32,7 @@ function StatCard({ icon, label, value, badge, subtitle, pastelColor, isAlert }:
         <div
             className={clsx(
                 "flex flex-col gap-2 p-5 rounded-2xl transition-all duration-200 relative overflow-hidden",
-                "hover:scale-[1.02] hover:shadow-lg cursor-pointer",
+                "hover:-translate-y-0.5 hover:shadow-lg cursor-pointer",
                 pastelColorMap[pastelColor],
                 isAlert && "ring-2 ring-destructive/30"
             )}
@@ -59,7 +59,7 @@ function StatCard({ icon, label, value, badge, subtitle, pastelColor, isAlert }:
                     <span
                         className={clsx(
                             "text-xs font-bold px-2 py-0.5 rounded-full",
-                            badge.type === "success" && "bg-emerald-500/20 text-emerald-700",
+                            badge.type === "success" && "bg-primary/20 text-primary",
                             badge.type === "warning" && "bg-amber-500/20 text-amber-700",
                             badge.type === "danger" && "bg-red-500/20 text-red-700"
                         )}

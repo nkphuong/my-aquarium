@@ -13,5 +13,9 @@
 // Tank actions
 export * from './tank.actions'
 
-// Auth actions
-export * from './auth.actions'
+// File actions
+export * from './file.actions'
+
+// Auth actions - using next-auth signIn/signOut directly
+// export * from './auth.actions'
+

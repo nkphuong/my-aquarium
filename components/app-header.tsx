@@ -13,7 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function AppHeader(user: { name?: string }) {
+interface AppHeaderProps {
+  user: { name?: string }
+}
+
+export default function AppHeader(props: AppHeaderProps) {
 
   async function handleLogout() {
     await signOut({ callbackUrl: '/login' })
@@ -56,6 +60,12 @@ export default function AppHeader(user: { name?: string }) {
           Maintenance
         </Link>
         <Link
+          href="/chat"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Ask Finley
+        </Link>
+        <Link
           href="/community"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
@@ -70,7 +80,7 @@ export default function AppHeader(user: { name?: string }) {
         </button>
         <div className="flex items-center gap-3 pl-3 border-l border-border">
           <span className="hidden sm:block text-sm font-bold text-foreground">
-            {user?.name}
+            {props.user?.name}
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -19,10 +19,10 @@ interface SuggestionCardProps {
 }
 
 const pastelColorMap = {
-    sage: "bg-pastel-sage",
-    peach: "bg-pastel-peach",
-    yellow: "bg-pastel-yellow",
-    purple: "bg-pastel-purple",
+    sage: "bg-warm-seafoam/20",
+    peach: "bg-warm-coral/10",
+    yellow: "bg-warm-gold/10",
+    purple: "bg-primary/5",
 }
 
 function SuggestionCard({
@@ -37,9 +37,9 @@ function SuggestionCard({
     return (
         <div
             className={clsx(
-                "p-4 rounded-2xl relative overflow-hidden transition-all hover:scale-[1.01]",
+                "p-4 rounded-2xl relative overflow-hidden transition-all hover:-translate-y-0.5",
                 variant === "alert"
-                    ? "bg-pastel-peach ring-1 ring-destructive/20"
+                    ? "bg-warm-coral/10 ring-1 ring-destructive/20"
                     : pastelColorMap[pastelColor]
             )}
         >
