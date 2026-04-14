@@ -10,6 +10,9 @@ export type { Tank, CreateTankInput, TankFilters } from './tank'
 export type { User } from './user'
 export type { LoginInput, RegisterInput, AuthResult, AuthTokens } from './auth'
 
+// Compatibility types
+export type * from './compatibility'
+
 // API response types
 export type {
     ApiResponse,
